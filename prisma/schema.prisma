@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//tabela de categoria, a qual receberá um ou mais produtos
+model Categoria {
+  id       String    @id @default(uuid())
+  nome     String    @unique
+  produtos Produto[]
+
+  @@map("categorias")
+}
+
+//tabela de produto
+model Produto {
+  id            String        @id @default(uuid())
+  numeracao     String        @unique
+  nome          String
+  descricao     String?
+  categoriaId   String?
+  categoria     Categoria?    @relation(fields: [categoriaId], references: [id], onDelete: Restrict)
+  unidadeMedida UnidadeMedida //tipo de valor enum
+  valorAtacado  Decimal       @db.Decimal(10, 2)
+  valorVarejo   Decimal       @db.Decimal(10, 2)
+  lotes         Lote[] //recebe todos os lotes relacionados
+
+  @@map("produtos")
+}
+
+//tabela de lotes
+model Lote {
+  id             String    @id @default(uuid())
+  numeracao      String    @unique
+  quantAdquirida Int
+  quantAtual     Int
+  dataAquisicao  DateTime
+  valorGasto     Decimal   @db.Decimal(10, 2)
+  validade       DateTime?
+  produtoId      String
+  produto        Produto   @relation(fields: [produtoId], references: [id], onDelete: Cascade)
+
+  @@map("lotes")
+}
+
+//esquema/tipo para valores aceitos em unidadeMedida  
+enum UnidadeMedida {
+  UNITARIA
+  METRICA
+}
