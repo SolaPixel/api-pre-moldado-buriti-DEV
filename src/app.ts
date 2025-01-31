@@ -1,8 +1,7 @@
 import fastify from "fastify"; // importando fastify
-import { PrismaClient } from "@prisma/client";
+import { appRoutes } from "./http/routes";
 
 export const app = fastify() // instanciando funções do fastify no objeto app
 
-const prisma = new PrismaClient()
-
-
+//ativação das rotas importadas
+app.register(appRoutes)

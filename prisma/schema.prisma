@@ -29,7 +29,7 @@ model Produto {
   nome          String
   descricao     String?
   categoriaId   String?
-  categoria     Categoria?    @relation(fields: [categoriaId], references: [id], onDelete: Restrict)
+  categoria     Categoria?    @relation(fields: [categoriaId], references: [id], onDelete: SetNull)
   unidadeMedida UnidadeMedida //tipo de valor enum
   valorAtacado  Decimal       @db.Decimal(10, 2)
   valorVarejo   Decimal       @db.Decimal(10, 2)
