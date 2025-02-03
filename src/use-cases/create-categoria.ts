@@ -4,6 +4,7 @@
 */
 
 import { CategoriasRepository } from "@/repositories/categorias-repository"
+import { CaregoriaAlreadyExistsError } from "./errors/categoria-already-exists"
 
 //para tipar o dado
 interface CreateCategoriaUseCaseRequest {
@@ -18,16 +19,16 @@ export class CreateCategoriaUseCase {
 
     async execute({ nome }: CreateCategoriaUseCaseRequest) {
 
-        // envia valor para repositório buscar no banco se há um registro "nome" com o mesmo valor
+        // envia valor para repositório buscar no banco se há um registro "nome" com o mesmo valor, para validação
         const categoriaWithSameNome = await this.categoriasRepository.findByNome(nome)
 
-        //caso haja um registro igual em "nome", retornar error
+        //caso haja um registro igual em "nome", retornar erro personalizado
         if (categoriaWithSameNome) {
-            throw new Error('Nome already exists.')
+            throw new CaregoriaAlreadyExistsError()
         }
 
 
-        //encaminhado dados para o repositório declarado no construtor
+        //encaminhado dados para o repositório declarado no construtor para registro definitivo do dado
         await this.categoriasRepository.create({
             nome,
         })

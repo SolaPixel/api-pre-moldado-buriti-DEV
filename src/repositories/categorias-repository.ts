@@ -1,5 +1,5 @@
 /* 
-    Repositório genérico das operações relacionadas à categorias.
+    Repositório genérico (interface) das operações relacionadas à categorias.
     Dedicado a criação de interface para tipagem, regras de negócio comuns 
     à todos os repositórios específicos e inteligência de código em use case 
 
