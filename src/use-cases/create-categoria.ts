@@ -5,10 +5,16 @@
 
 import { CategoriasRepository } from "@/repositories/categorias-repository"
 import { CaregoriaAlreadyExistsError } from "./errors/categoria-already-exists"
+import { Categoria } from "@prisma/client"
 
 //para tipar o dado
 interface CreateCategoriaUseCaseRequest {
     nome: string,
+}
+
+//tipando o retorno do use case
+interface CreateCategoriaUseCaseResponse {
+    categoria: Categoria
 }
 
 //classe contendo caso de uso independente responsável por receber dados do controller e inserir no banco através de repositório declarado
@@ -17,7 +23,7 @@ export class CreateCategoriaUseCase {
     //construtor com objetivo de receber dependêncas do controller, com tipagem dinâmica de repositório genérico
     constructor(private categoriasRepository: CategoriasRepository) { }
 
-    async execute({ nome }: CreateCategoriaUseCaseRequest) {
+    async execute({ nome }: CreateCategoriaUseCaseRequest): Promise<CreateCategoriaUseCaseResponse> {
 
         // envia valor para repositório buscar no banco se há um registro "nome" com o mesmo valor, para validação
         const categoriaWithSameNome = await this.categoriasRepository.findByNome(nome)
@@ -29,9 +35,14 @@ export class CreateCategoriaUseCase {
 
 
         //encaminhado dados para o repositório declarado no construtor para registro definitivo do dado
-        await this.categoriasRepository.create({
+        const categoria = await this.categoriasRepository.create({
             nome,
         })
+
+        //devolvendo categoria para testes
+        return {
+            categoria,
+        }
 
     }
 }

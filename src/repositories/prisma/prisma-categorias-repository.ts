@@ -1,11 +1,20 @@
-/* Arquivo dedicado exclusivamente a operações diretas no banco de dados envolvendo CATEGORIAS através do PRISMA */
+/* 
+Arquivo dedicado exclusivamente a operações diretas no banco de 
+dados envolvendo CATEGORIAS através do PRISMA 
+*/
 
 import { prisma } from "@/lib/prisma";
-import { Prisma } from "@prisma/client"; //método com tipagens personalizadas e automáticas do prisma
+import { Categoria, Prisma } from "@prisma/client"; //método com tipagens personalizadas e automáticas do prisma
 import { CategoriasRepository } from "../categorias-repository";
 
-//classe com operações que utiliza do repositório genérico de categorias e adiciona dado diretamente no banco
+//classe com operações que utiliza métodos do repositório genérico e adiciona dado diretamente no banco
 export class PrismaCategoriasRepository implements CategoriasRepository {
+    
+    async findAll(){
+        return await prisma.categoria.findMany()
+    }
+
+
      async findByNome(nome: string) {
         
         // busca no banco se há um registro "nome" com o mesmo valor, conforme repositório genérico
