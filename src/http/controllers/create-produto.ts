@@ -1,8 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { z } from "zod";
-import { PrismaProdutosRepository } from "@/repositories/prisma/prisma-produtos-repository";
-import { CreateProdutoUseCase } from "@/use-cases/create-produto";
 import { ProdutoAlreadyExistsError } from "@/use-cases/errors/produto-already-exists";
+import { makeCreateProdutoUseCase } from "@/use-cases/factories/make-create-produto-use-case";
 
 // Controller para criar um novo produto
 export async function createProduto(request: FastifyRequest, reply: FastifyReply) {
@@ -30,8 +29,7 @@ export async function createProduto(request: FastifyRequest, reply: FastifyReply
 
     try {
         //instancia dos reposotórios
-        const produtosRepository = new PrismaProdutosRepository();
-        const createProdutoUseCase = new CreateProdutoUseCase(produtosRepository);
+        const createProdutoUseCase = makeCreateProdutoUseCase()
 
         // Executa o caso de uso para criar o produto
         await createProdutoUseCase.execute({

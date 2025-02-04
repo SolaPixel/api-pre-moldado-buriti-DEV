@@ -9,7 +9,7 @@ import { createProduto } from "./controllers/create-produto";
 export async function appRoutes(app: FastifyInstance) {
 
     app.post('/categorias', createCategoria)
-    app.get('/obterCategorias', getAllCategorias)
+    app.get('/allCategorias', getAllCategorias)
 
     app.post('/produtos', createProduto)
 }

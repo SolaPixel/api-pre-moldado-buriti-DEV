@@ -29,7 +29,7 @@ export class PrismaProdutosRepository implements ProdutosRepository {
     }
 
     //inserir produto no banco
-    async create(data: Prisma.ProdutoCreateInput): Promise<Produto> {
+    async create(data: Prisma.ProdutoCreateInput){
         const produto = await prisma.produto.create({
             data,
         });
@@ -38,7 +38,7 @@ export class PrismaProdutosRepository implements ProdutosRepository {
     }
 
     //buscar todos os produtos
-    async findAll(): Promise<Produto[]> {
+    async findAll() {
         return await prisma.produto.findMany({
             include: { lotes: true, categoria: true }, // Retorna produtos com seus lotes e categoria
         });

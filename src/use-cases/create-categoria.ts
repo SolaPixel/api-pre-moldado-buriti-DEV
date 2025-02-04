@@ -7,7 +7,7 @@ import { CategoriasRepository } from "@/repositories/categorias-repository"
 import { CaregoriaAlreadyExistsError } from "./errors/categoria-already-exists"
 import { Categoria } from "@prisma/client"
 
-//para tipar o dado
+//para tipar parametro do execute com todos os dados que virão para o caso de uso
 interface CreateCategoriaUseCaseRequest {
     nome: string,
 }

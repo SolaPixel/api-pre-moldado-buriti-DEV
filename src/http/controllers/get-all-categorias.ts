@@ -1,13 +1,11 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { PrismaCategoriasRepository } from '@/repositories/prisma/prisma-categorias-repository'
-import { GetAllCategorias } from "@/use-cases/get-all-categorias";
+import { makeGetAllCategoriasUseCase } from "@/use-cases/factories/make-get-all-categorias-use-case";
 
 export async function getAllCategorias(request: FastifyRequest, reply: FastifyReply) {
     try {
 
-        //instanciando repositório para o caso de uso
-        const categoriasRepository = new PrismaCategoriasRepository()
-        const getAllCategorias = new GetAllCategorias(categoriasRepository)
+        //instanciando repositório e use case da factory
+        const getAllCategorias = makeGetAllCategoriasUseCase()
 
          // Executa o caso de uso para obter as categorias
          const { categorias } = await getAllCategorias.execute();

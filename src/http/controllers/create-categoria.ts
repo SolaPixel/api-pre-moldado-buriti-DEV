@@ -7,9 +7,8 @@
 
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from "zod"
-import { CreateCategoriaUseCase } from '@/use-cases/create-categoria' //recebendo classe responsável pelo use case
-import { PrismaCategoriasRepository } from '@/repositories/prisma/prisma-categorias-repository'
 import { CaregoriaAlreadyExistsError } from '@/use-cases/errors/categoria-already-exists'
+import { makeCreateCategoriaUseCase } from '@/use-cases/factories/make-create-categoria-use-case'
 
 // controller de criação de categoria
 export async function createCategoria(request: FastifyRequest, reply: FastifyReply) { //tipando com funções do fastify
@@ -25,9 +24,8 @@ export async function createCategoria(request: FastifyRequest, reply: FastifyRep
     //encaminha os dados, juntamente com o repositório desejado para o use-case, e verifica se houve algum erro
     try {
 
-        //instanciando repositório juntamente com caso de uso, para envio correto dos dados
-        const categoriasRepository = new PrismaCategoriasRepository()
-        const createCategoriaUseCase = new CreateCategoriaUseCase(categoriasRepository)
+        //instanciando repositório juntamente com caso de uso, vindo da factory
+        const createCategoriaUseCase = makeCreateCategoriaUseCase()
 
         await createCategoriaUseCase.execute({ //método vindo da classe do use case, responsável por encaminhar dado para repositório desejado
             nome,
