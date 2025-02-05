@@ -2,6 +2,8 @@ import { InMemoryProdutosRepository } from '@/repositories/in-memory/in-memory-p
 import { expect, describe, it, beforeEach } from 'vitest'
 import { CreateProdutoUseCase } from './create-produto'
 import { ProdutoAlreadyExistsError } from './errors/produto-already-exists'
+import { InMemoryCategoriasRepository } from '@/repositories/in-memory/in-memory-categorias-repository'
+import { CreateCategoriaUseCase } from './create-categoria'
 
 //criando variáveis globais tipadas com o devido dado
 let produtosRepository: InMemoryProdutosRepository
@@ -64,6 +66,35 @@ describe('Create Categoria Use Case', () => {
                 valorVarejo: 10
             }),
         ).rejects.toBeInstanceOf(ProdutoAlreadyExistsError)
+
+    })
+
+    //deve ser posível cadastrar um produto vinculado a uma categoria
+    it('Should be able to register with categoria', async () => {
+
+        //instanciando repositorio remoto de categoria e passando como parametro para o use case
+        const categoriasRepository = new InMemoryCategoriasRepository()
+        // boa prática de nomear variável que representa caso de uso como "sut"
+        const createCategoriaUseCase = new CreateCategoriaUseCase(categoriasRepository)
+
+        //adicionando categoria pelo use case
+        const { categoria } = await createCategoriaUseCase.execute({
+            nome: 'Metálicos'
+        })
+
+        //adicionando produto pelo use case
+        const { produto } = await sut.execute({
+            numeracao: '222',
+            nome: 'fafd',
+            descricao: 'dasfdasf',
+            categoriaId: categoria.id,
+            unidadeMedida: 'METRICA',
+            valorAtacado: 10,
+            valorVarejo: 10
+        })
+
+         //verificando se a categoria do produto é a mesma que foi adicionada
+        expect(produto.categoriaId).toEqual(categoria.id)
 
     })
 })

@@ -1,5 +1,6 @@
 import { Produto, Prisma } from "@prisma/client";
 import { ProdutosRepository } from "../produtos-repository";
+import { randomUUID } from "node:crypto";
 
 export class InMemoryProdutosRepository implements ProdutosRepository {
 
@@ -7,13 +8,13 @@ export class InMemoryProdutosRepository implements ProdutosRepository {
     public items: Produto[] = []
 
     //função de adicionar objeto no array
-    async create(data: Prisma.ProdutoCreateInput){
+    async create(data: Prisma.ProdutoUncheckedCreateInput){
         const produto: Produto = {
-            id: 'produto-1',
+            id: randomUUID(),
             numeracao: data.numeracao,
             nome: data.nome,
             descricao: data.descricao ?? null,
-            categoriaId: data.categoria ? (data.categoria as any).connect?.id ?? null : null, // Garantindo que seja uma string ou null
+            categoriaId: data.categoriaId ??  null, // Garantindo que seja uma string ou null
             unidadeMedida: data.unidadeMedida,
             valorAtacado: new Prisma.Decimal(data.valorAtacado as string | number), // Conversão explícita
             valorVarejo: new Prisma.Decimal(data.valorVarejo as string | number),   // Conversão explícita
@@ -26,8 +27,14 @@ export class InMemoryProdutosRepository implements ProdutosRepository {
     }
 
 
-    findById(id: string): Promise<Produto | null> {
-        throw new Error("Method not implemented.");
+    async findById(id: string) {
+        const produto = this.items.find((item)=> item.id === id)
+
+        if(!produto){
+            return null
+        }
+
+        return produto
     }
 
     //buscar produto pela numeração

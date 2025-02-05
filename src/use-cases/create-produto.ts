@@ -46,13 +46,13 @@ export class CreateProdutoUseCase {
 
         //caso tudo dê certo, função que vem do repositório para adicionar dados no banco
         const produto = await this.produtosRepository.create({
-            numeracao: numeracao,
-            nome: nome,
-            descricao: descricao,
-            categoria: categoriaId ? { connect: { id: categoriaId } } : undefined, // Se categoriaId não foi informado, atribui undefined
-            unidadeMedida: unidadeMedida as any, // Conversão para ENUM
-            valorAtacado: valorAtacado,
-            valorVarejo: valorVarejo,
+            numeracao,
+            nome,
+            descricao,
+            categoriaId: categoriaId,
+            unidadeMedida: unidadeMedida as any, // Conversão para ENUM,
+            valorAtacado,
+            valorVarejo,
         });
 
         //devolvendo produto para possíveis testes

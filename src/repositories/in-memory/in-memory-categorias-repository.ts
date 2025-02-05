@@ -2,6 +2,7 @@
 
 import { Categoria, Prisma } from "@prisma/client";
 import { CategoriasRepository } from "../categorias-repository";
+import { randomUUID } from "node:crypto";
 
 //classe com operações que utiliza do repositório genérico de categorias e adiciona dado em memória local
 export class InMemoryCategoriasRepository implements CategoriasRepository {
@@ -24,7 +25,7 @@ export class InMemoryCategoriasRepository implements CategoriasRepository {
     //método de criação de categoria instanciando tipagem do prista
     async create(data: Prisma.CategoriaCreateInput){
         const categoria = {
-            id: 'categoria-1',
+            id: randomUUID(),
             nome: data.nome,
         }
 
