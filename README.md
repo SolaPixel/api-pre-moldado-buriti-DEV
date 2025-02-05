@@ -13,7 +13,7 @@ Pré moldado Buriti App
 - [ ] Deve ser possível editar qualquer informação de um produto
 - [x] Deve ser possível obter todas as categorias cadastradas
 - [ ] Deve ser possível editar e excluir uma categoria
-- [ ] Deve ser possível cadastrar um ou mais lotes no estoque de um produto
+- [x] Deve ser possível cadastrar um ou mais lotes no estoque de um produto
 - [ ] Deve ser possível editar e excluir um lote
 
 

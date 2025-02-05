@@ -32,7 +32,8 @@ describe('Create Categoria Use Case', () => {
             descricao: 'dasfdasf',
             unidadeMedida: 'METRICA',
             valorAtacado: 10,
-            valorVarejo: 10
+            valorVarejo: 10,
+            quantEstoque: 0
         })
 
         //verificando se criou uma categoria através da existencia de seu id
@@ -52,7 +53,8 @@ describe('Create Categoria Use Case', () => {
             descricao: 'dasfdasf',
             unidadeMedida: 'METRICA',
             valorAtacado: 10,
-            valorVarejo: 10
+            valorVarejo: 10,
+            quantEstoque: 0
         })
 
         //deve rejeitar, retornando erro apropriado 
@@ -63,7 +65,8 @@ describe('Create Categoria Use Case', () => {
                 descricao: 'dasfdasf',
                 unidadeMedida: 'METRICA',
                 valorAtacado: 10,
-                valorVarejo: 10
+                valorVarejo: 10,
+                quantEstoque: 0
             }),
         ).rejects.toBeInstanceOf(ProdutoAlreadyExistsError)
 
@@ -90,7 +93,8 @@ describe('Create Categoria Use Case', () => {
             categoriaId: categoria.id,
             unidadeMedida: 'METRICA',
             valorAtacado: 10,
-            valorVarejo: 10
+            valorVarejo: 10,
+            quantEstoque: 0
         })
 
          //verificando se a categoria do produto é a mesma que foi adicionada

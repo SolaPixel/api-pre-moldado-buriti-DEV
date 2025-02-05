@@ -3,6 +3,8 @@ import { Produto, Prisma } from "@prisma/client";
 import { ProdutosRepository } from "../produtos-repository";
 
 export class PrismaProdutosRepository implements ProdutosRepository {
+    
+
 
 
     // listar produto por id
@@ -29,7 +31,7 @@ export class PrismaProdutosRepository implements ProdutosRepository {
     }
 
     //inserir produto no banco
-    async create(data: Prisma.ProdutoCreateInput){
+    async create(data: Prisma.ProdutoCreateInput) {
         const produto = await prisma.produto.create({
             data,
         });
@@ -43,4 +45,27 @@ export class PrismaProdutosRepository implements ProdutosRepository {
             include: { lotes: true, categoria: true }, // Retorna produtos com seus lotes e categoria
         });
     }
+
+    async update(id: string, data: Prisma.ProdutoUncheckedUpdateInput) {
+        const produto =  await prisma.produto.update({
+            where: { id },
+            data,
+        });
+
+        return produto
+    }
+
+    async atualizarQuantEstoque(produtoId: string) {
+        const soma = await prisma.lote.aggregate({
+          where: { produtoId },
+          _sum: { quantAtual: true },
+        });
+    
+        const produto = await prisma.produto.update({
+          where: { id: produtoId },
+          data: { quantEstoque: soma._sum.quantAtual || 0 },
+        });
+
+        return produto
+      }
 }
