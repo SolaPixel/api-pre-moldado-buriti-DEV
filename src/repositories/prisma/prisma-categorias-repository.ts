@@ -9,6 +9,17 @@ import { CategoriasRepository } from "../categorias-repository";
 
 //classe com operações que utiliza métodos do repositório genérico e adiciona dado diretamente no banco
 export class PrismaCategoriasRepository implements CategoriasRepository {
+    
+    
+    
+    async findById(id: string) {
+        const categoria = await prisma.categoria.findUnique({
+            where: { id },
+        });
+
+        return categoria
+    }
+    
 
     async findAll() {
         return await prisma.categoria.findMany()

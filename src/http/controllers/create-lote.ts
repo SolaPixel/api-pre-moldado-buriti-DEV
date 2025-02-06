@@ -9,7 +9,7 @@ export async function createLote(request: FastifyRequest, reply: FastifyReply) {
     const createLoteBodySchema = z.object({
         numeracao: z.string().min(1, "A numeração é obrigatória."),
         quantAdquirida: z.number(),
-        quantAtual: z.number(),
+        quantAtual: z.number().optional(),
         dataAquisicao: z.union([z.string().transform((val) => new Date(val)), z.date()]),
         valorGasto: z.number(),
         validade: z.union([z.string().transform((val) => new Date(val)), z.date()]),
@@ -18,7 +18,7 @@ export async function createLote(request: FastifyRequest, reply: FastifyReply) {
     
 
     // Faz o parse e valida os dados recebidos
-    const {
+    let {
         numeracao,
         quantAdquirida,
         quantAtual,
@@ -27,6 +27,11 @@ export async function createLote(request: FastifyRequest, reply: FastifyReply) {
         validade,
         produtoId,
     } = createLoteBodySchema.parse(request.body);
+
+    //faz com que quantAtual receba o valor padrão de quantAdiquirida caso a quantatual não seja informada
+    if (quantAtual === undefined) {
+        quantAtual = quantAdquirida;
+    }
 
     try {
         //instancia dos reposotórios

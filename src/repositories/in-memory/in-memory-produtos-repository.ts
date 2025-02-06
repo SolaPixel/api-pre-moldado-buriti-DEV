@@ -5,6 +5,11 @@ import { randomUUID } from "node:crypto";
 export class InMemoryProdutosRepository implements ProdutosRepository {
     
     
+    findByCategoria(categoriaId: string): Promise<Produto[]> {
+        throw new Error("Method not implemented.");
+    }
+    
+    
     // Atualizar a quantidade de estoque
     // Atualizar quantidade de estoque com base nos lotes
     async atualizarQuantEstoque(produtoId: string){

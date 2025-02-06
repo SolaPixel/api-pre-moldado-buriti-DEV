@@ -3,14 +3,26 @@ import { Produto, Prisma } from "@prisma/client";
 import { ProdutosRepository } from "../produtos-repository";
 
 export class PrismaProdutosRepository implements ProdutosRepository {
+
+
+   
     
-
-
 
     // listar produto por id
     async findById(id: string) {
         const produto = await prisma.produto.findUnique({
             where: { id },
+            include: { lotes: true, categoria: true }, // Inclui lotes e categoria na busca
+        });
+
+        return produto
+    }
+
+    //listar por categoria
+    async findByCategoria(categoriaId: string) {
+
+        const produto = await prisma.produto.findMany({
+            where: { categoriaId },
             include: { lotes: true, categoria: true }, // Inclui lotes e categoria na busca
         });
 
