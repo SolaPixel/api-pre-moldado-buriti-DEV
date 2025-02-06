@@ -6,6 +6,17 @@ import { randomUUID } from "node:crypto";
 
 //classe com operações que utiliza do repositório genérico de categorias e adiciona dado em memória local
 export class InMemoryCategoriasRepository implements CategoriasRepository {
+    delete(id: string): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+
+
+    findById(id: string): Promise<Categoria | null> {
+        throw new Error("Method not implemented.");
+    }
+    update(id: string, data: Prisma.CategoriaUpdateInput): Promise<Categoria> {
+        throw new Error("Method not implemented.");
+    }
    
 
     //array com dados salvos

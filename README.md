@@ -9,12 +9,13 @@ Pré moldado Buriti App
 - [x] Deve ser possível obter todos os produtos cadastrados
 - [x] Deve ser possível obter todos os produtos cadastrados de uma única categoria
 - [x] Deve ser possível obter um único produto cadastrado
-- [ ] Deve ser possível Excluir um produto
+- [x] Deve ser possível Excluir um produto
 - [x] Deve ser possível editar qualquer informação de um produto
 - [x] Deve ser possível obter todas as categorias cadastradas
-- [ ] Deve ser possível editar e excluir uma categoria
+- [x] Deve ser possível editar e excluir uma categoria
 - [x] Deve ser possível cadastrar um ou mais lotes no estoque de um produto
-- [ ] Deve ser possível editar e excluir um lote
+- [X] Deve ser possível obter todos os lotes de um produto
+- [x] Deve ser possível editar e excluir um lote
 
 
 ## RNs
@@ -27,5 +28,7 @@ Pré moldado Buriti App
 
 ## RNFs
 
-- [ ] Os dados da aplicação precisam estar persistidos em um banco postgreSQL
+- [x] Os dados da aplicação precisam estar persistidos em um banco postgreSQL
 - [ ] Toda entidade será listada por ordem de numeração
+- [ ] Todos os casos de uso deverão ser acessados via requisição http
+- [ ] Todos os casos de uso deverão receber testes unitários recebendo repositórios em meória como parâmetros

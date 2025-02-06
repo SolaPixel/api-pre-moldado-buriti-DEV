@@ -4,25 +4,27 @@ import { ProdutosRepository } from "../produtos-repository";
 
 export class PrismaProdutosRepository implements ProdutosRepository {
 
-
-   
-    
-
-    // listar produto por id
-    async findById(id: string) {
-        const produto = await prisma.produto.findUnique({
-            where: { id },
-            include: { lotes: true, categoria: true }, // Inclui lotes e categoria na busca
+    //inserir produto no banco
+    async create(data: Prisma.ProdutoCreateInput) {
+        const produto = await prisma.produto.create({
+            data,
         });
 
         return produto
     }
 
-    //listar por categoria
-    async findByCategoria(categoriaId: string) {
+    //buscar todos os produtos
+    async findAll() {
+        return await prisma.produto.findMany({
+            include: { lotes: true, categoria: true }, // Retorna produtos com seus lotes e categoria
+        });
+    }
 
-        const produto = await prisma.produto.findMany({
-            where: { categoriaId },
+
+    // listar produto por id
+    async findById(id: string) {
+        const produto = await prisma.produto.findUnique({
+            where: { id },
             include: { lotes: true, categoria: true }, // Inclui lotes e categoria na busca
         });
 
@@ -42,24 +44,19 @@ export class PrismaProdutosRepository implements ProdutosRepository {
 
     }
 
-    //inserir produto no banco
-    async create(data: Prisma.ProdutoCreateInput) {
-        const produto = await prisma.produto.create({
-            data,
+    //listar por categoria
+    async findByCategoria(categoriaId: string) {
+
+        const produto = await prisma.produto.findMany({
+            where: { categoriaId },
+            include: { lotes: true, categoria: true }, // Inclui lotes e categoria na busca
         });
 
         return produto
     }
 
-    //buscar todos os produtos
-    async findAll() {
-        return await prisma.produto.findMany({
-            include: { lotes: true, categoria: true }, // Retorna produtos com seus lotes e categoria
-        });
-    }
-
     async update(id: string, data: Prisma.ProdutoUncheckedUpdateInput) {
-        const produto =  await prisma.produto.update({
+        const produto = await prisma.produto.update({
             where: { id },
             data,
         });
@@ -69,15 +66,19 @@ export class PrismaProdutosRepository implements ProdutosRepository {
 
     async atualizarQuantEstoque(produtoId: string) {
         const soma = await prisma.lote.aggregate({
-          where: { produtoId },
-          _sum: { quantAtual: true },
+            where: { produtoId },
+            _sum: { quantAtual: true },
         });
-    
+
         const produto = await prisma.produto.update({
-          where: { id: produtoId },
-          data: { quantEstoque: soma._sum.quantAtual || 0 },
+            where: { id: produtoId },
+            data: { quantEstoque: soma._sum.quantAtual || 0 },
         });
 
         return produto
-      }
+    }
+
+    async delete(id: string) {
+        await prisma.produto.delete({ where: { id } });
+    }
 }

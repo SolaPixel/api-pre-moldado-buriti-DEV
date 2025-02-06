@@ -3,6 +3,9 @@ import { ProdutosRepository } from "../produtos-repository";
 import { randomUUID } from "node:crypto";
 
 export class InMemoryProdutosRepository implements ProdutosRepository {
+    delete(id: string): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
     
     
     findByCategoria(categoriaId: string): Promise<Produto[]> {

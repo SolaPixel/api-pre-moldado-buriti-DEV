@@ -8,4 +8,5 @@ export interface ProdutosRepository {
     create(data: Prisma.ProdutoUncheckedCreateInput): Promise<Produto>; //adicionar produtos no banco de dados
     update(id: string, data: Prisma.ProdutoUncheckedUpdateInput): Promise<Produto>; //método para atualização
     atualizarQuantEstoque(produtoId: string): Promise<Produto>
+    delete(id: string): Promise<void>
 }

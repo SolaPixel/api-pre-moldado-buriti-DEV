@@ -9,9 +9,22 @@ import { CategoriasRepository } from "../categorias-repository";
 
 //classe com operações que utiliza métodos do repositório genérico e adiciona dado diretamente no banco
 export class PrismaCategoriasRepository implements CategoriasRepository {
-    
-    
-    
+
+    //tipando "data" com tipagem personalizadda do prisma própria pro metodo create
+    async create(data: Prisma.CategoriaCreateInput) {
+
+        //insere o dado no banco e retorna categoria
+        const categoria = await prisma.categoria.create({
+            data,
+        })
+
+        return categoria
+    }
+
+    async findAll() {
+        return await prisma.categoria.findMany()
+    }
+
     async findById(id: string) {
         const categoria = await prisma.categoria.findUnique({
             where: { id },
@@ -19,12 +32,6 @@ export class PrismaCategoriasRepository implements CategoriasRepository {
 
         return categoria
     }
-    
-
-    async findAll() {
-        return await prisma.categoria.findMany()
-    }
-
 
     async findByNome(nome: string) {
 
@@ -38,14 +45,15 @@ export class PrismaCategoriasRepository implements CategoriasRepository {
         return categoria
     }
 
-    //tipando "data" com tipagem personalizadda do prisma própria pro metodo create
-    async create(data: Prisma.CategoriaCreateInput) {
+    async update(id: string, data: Prisma.CategoriaUpdateInput) {
 
-        //insere o dado no banco e retorna categoria
-        const categoria = await prisma.categoria.create({
-            data,
-        })
+        const categoria = prisma.categoria.update({ where: { id }, data });
 
         return categoria
     }
+
+    async delete(id: string){
+        await prisma.categoria.delete({ where: { id } });
+    }
+    
 }

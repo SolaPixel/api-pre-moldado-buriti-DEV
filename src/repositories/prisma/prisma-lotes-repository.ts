@@ -1,11 +1,24 @@
 import { prisma } from "@/lib/prisma";
-import { Produto, Prisma, Lote } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { LotesRepository } from "../lotes-repository";
 
 export class PrismaLotesRepository implements LotesRepository {
 
-    findById(id: string): Promise<Lote | null> {
-        throw new Error("Method not implemented.");
+    //inserir um lote no banco
+    async create(data: Prisma.LoteUncheckedCreateInput) {
+        const lote = await prisma.lote.create({
+            data,
+        });
+
+        return lote
+    }
+
+    async findById(id: string) {
+        const lote = await prisma.lote.findUnique({
+            where: { id },
+        });
+
+        return lote
     }
 
     async findByNumeracao(numeracao: string) {
@@ -18,21 +31,18 @@ export class PrismaLotesRepository implements LotesRepository {
         return lote
     }
 
-    //inserir um lote no banco
-    async create(data: Prisma.LoteUncheckedCreateInput) {
-        const lote = await prisma.lote.create({
+    async update(id: string, data: Prisma.LoteUncheckedUpdateInput) {
+        const lote = await prisma.lote.update({
+            where: { id },
             data,
         });
 
         return lote
     }
 
-    findAll(): Promise<Lote[]> {
-        throw new Error("Method not implemented.");
+
+    async delete(id: string) {
+        await prisma.lote.delete({ where: { id } });
     }
-    
 
-
-
-    
 }
