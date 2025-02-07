@@ -42,7 +42,7 @@ model Produto {
 //tabela de lotes
 model Lote {
   id             String    @id @default(uuid())
-  numeracao      String    @unique
+  numeracao      String    
   quantAdquirida Int
   quantAtual     Int
   dataAquisicao  DateTime

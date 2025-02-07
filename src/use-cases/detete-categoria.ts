@@ -8,7 +8,7 @@ interface DeleteCategoriaUseCaseRequest {
 
 // Definição da classe responsável pelo caso de uso
 export class DeleteCategoriaUseCase {
-    constructor(private categoriasRepository: CategoriasRepository) {}
+    constructor(private categoriasRepository: CategoriasRepository) { }
 
     async execute({ id }: DeleteCategoriaUseCaseRequest): Promise<void> {
         // Buscar se a categoria existe antes de excluir

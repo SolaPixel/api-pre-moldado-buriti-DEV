@@ -10,7 +10,7 @@ interface CreateLoteUseCaseRequest {
     quantAtual: number;
     dataAquisicao: Date;
     valorGasto: number;
-    validade?: Date | null;
+    validade: Date | null;
     produtoId: string;
 }
 
@@ -46,7 +46,7 @@ export class CreateLoteUseCase {
     }: CreateLoteUseCaseRequest): Promise<CreateLoteUseCaseResponse> {
 
         //encaminha lote para repositório geral para verificar possível numeração duplicada
-        const loteWithSameNumeracao = await this.lotesRepository.findByNumeracao(numeracao);
+        const loteWithSameNumeracao = await this.lotesRepository.findByNumeracao(numeracao, produtoId);
 
         if (loteWithSameNumeracao) {
             throw new LoteAlreadyExistsError(); // Lança erro caso o lote já exista

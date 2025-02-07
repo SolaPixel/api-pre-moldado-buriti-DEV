@@ -23,7 +23,7 @@ Pré moldado Buriti App
 - [x] Não se pode cadastrar um produto com numeração duplicada
 - [x] Não deve ser possível cadastrar duas ou mais categorias com o mesmo nome
 - [x] Cada registro de produto deve obter um campo "estoque" somando a quantidade cadastrada em cada lote
-- [x] Não se pode cadastrar um lote com numeração duplicada
+- [x] Não se pode cadastrar um lote com numeração duplicada relacionado a um mesmo produto
 - [x] Ao cadastrar um lote, o campo "quantAtual" deve ser igual a quantInicial 
 
 ## RNFs

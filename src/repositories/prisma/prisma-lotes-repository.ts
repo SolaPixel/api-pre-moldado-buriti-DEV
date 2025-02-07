@@ -21,10 +21,11 @@ export class PrismaLotesRepository implements LotesRepository {
         return lote
     }
 
-    async findByNumeracao(numeracao: string) {
-        const lote = await prisma.lote.findUnique({
+    async findByNumeracao(numeracao: string, produtoId: string) {
+        const lote = await prisma.lote.findFirst({
             where: {
-                numeracao
+                numeracao,
+                produtoId
             },
         });
 

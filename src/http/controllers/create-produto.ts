@@ -9,8 +9,8 @@ export async function createProduto(request: FastifyRequest, reply: FastifyReply
     const createProdutoBodySchema = z.object({
         numeracao: z.string().min(1, "A numeração é obrigatória."),
         nome: z.string().min(1, "O nome do produto é obrigatório."),
-        descricao: z.string().optional(),
-        categoriaId: z.string().optional(),
+        descricao: z.string().nullable(),
+        categoriaId: z.string().nullable(),
         unidadeMedida: z.enum(["METRICA", "UNITARIA"]), // Suporte a enum
         valorAtacado: z.number(),
         valorVarejo: z.number(),

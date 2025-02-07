@@ -3,6 +3,12 @@ import { LotesRepository } from "../lotes-repository";
 import { randomUUID } from "node:crypto";
 
 export class InMemoryLotesRepository implements LotesRepository {
+    update(id: string, data: Prisma.LoteUncheckedUpdateInput): Promise<Lote> {
+        throw new Error("Method not implemented.");
+    }
+    delete(id: string): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
 
     public items: Lote[] = [];
 

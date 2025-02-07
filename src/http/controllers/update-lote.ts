@@ -1,24 +1,26 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { z } from "zod";
 import { LoteAlreadyExistsError } from "@/use-cases/errors/lote-already-exists";
-import { makeCreateLoteUseCase } from "@/use-cases/factories/make-create-lote-use-case";
+import { makeUpdateLoteUseCase } from "@/use-cases/factories/make-update-lote-use-case";
 
 // Controller para criar um novo lote
-export async function createLote(request: FastifyRequest, reply: FastifyReply) {
+export async function updateLote(request: FastifyRequest, reply: FastifyReply) {
     // Validação dos dados com Zod
-    const createLoteBodySchema = z.object({
-        numeracao: z.string().min(1, "A numeração é obrigatória."),
-        quantAdquirida: z.number(),
+    const updateLoteBodySchema = z.object({
+        id: z.string(),
+        numeracao: z.string().optional(),
+        quantAdquirida: z.number().optional(),
         quantAtual: z.number().optional(),
-        dataAquisicao: z.union([z.string().transform((val) => new Date(val)), z.date()]),
-        valorGasto: z.number(),
-        validade: z.union([z.string().transform((val) => new Date(val)), z.date()]).nullable(),
+        dataAquisicao: z.union([z.string().transform((val) => new Date(val)), z.date()]).optional(),
+        valorGasto: z.number().optional(),
+        validade: z.union([z.string().transform((val) => new Date(val)), z.date()]).optional().nullable(),
         produtoId: z.string()
     });
     
 
     // Faz o parse e valida os dados recebidos
-    let {
+    const {
+        id,
         numeracao,
         quantAdquirida,
         quantAtual,
@@ -26,19 +28,16 @@ export async function createLote(request: FastifyRequest, reply: FastifyReply) {
         valorGasto,
         validade,
         produtoId,
-    } = createLoteBodySchema.parse(request.body);
+    } = updateLoteBodySchema.parse(request.body);
 
-    //faz com que quantAtual receba o valor padrão de quantAdiquirida caso a quantatual não seja informada
-    if (quantAtual === undefined) {
-        quantAtual = quantAdquirida;
-    }
 
     try {
         //instancia dos reposotórios
-        const createLoteUseCase = makeCreateLoteUseCase()
+        const updateLoteUseCase = makeUpdateLoteUseCase()
 
         // Executa o caso de uso para criar o lote
-        await createLoteUseCase.execute({
+        await updateLoteUseCase.execute({
+            id,
             numeracao,
             quantAdquirida,
             quantAtual,
@@ -58,5 +57,5 @@ export async function createLote(request: FastifyRequest, reply: FastifyReply) {
     }
 
     //retorno caso tudo de certo
-    return reply.status(201).send()
+    return reply.status(204).send()
 }

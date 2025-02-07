@@ -59,9 +59,9 @@ export class UpdateLoteUseCase {
 
         if (numeracao) {
             // Verifica se a nova numeração já pertence a outro lote
-            const loteWithSameNumeracao = await this.lotesRepository.findByNumeracao(numeracao);
+            const loteWithSameNumeracao = await this.lotesRepository.findByNumeracao(numeracao, produtoId);
 
-            if (loteWithSameNumeracao && loteWithSameNumeracao.id !== id) {
+            if (loteWithSameNumeracao) {
                 throw new LoteAlreadyExistsError();
             }
         }

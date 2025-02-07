@@ -8,12 +8,11 @@ interface UpdateProdutoUseCaseRequest {
     id: string;
     numeracao?: string;
     nome?: string;
-    descricao?: string;
-    categoriaId?: string;
+    descricao?: string | null,
+    categoriaId?: string | null,
     unidadeMedida?: string;
     valorAtacado?: number;
     valorVarejo?: number;
-    quantEstoque?: number;
 }
 
 // Tipagem do retorno da atualização do produto
@@ -34,7 +33,6 @@ export class UpdateProdutoUseCase {
         unidadeMedida,
         valorAtacado,
         valorVarejo,
-        quantEstoque,
     }: UpdateProdutoUseCaseRequest): Promise<UpdateProdutoUseCaseResponse> {
 
         // Busca o produto pelo ID
@@ -63,8 +61,7 @@ export class UpdateProdutoUseCase {
             categoriaId,
             unidadeMedida: unidadeMedida as any, // Conversão para ENUM
             valorAtacado,
-            valorVarejo,
-            quantEstoque
+            valorVarejo
         });
 
         return { produto: updatedProduto };

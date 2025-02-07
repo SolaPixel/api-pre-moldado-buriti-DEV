@@ -31,6 +31,7 @@ describe('Create Categoria Use Case', () => {
             nome: 'fafd',
             descricao: 'dasfdasf',
             unidadeMedida: 'METRICA',
+            categoriaId: null,
             valorAtacado: 10,
             valorVarejo: 10,
             quantEstoque: 0
@@ -51,6 +52,7 @@ describe('Create Categoria Use Case', () => {
             numeracao,
             nome: 'fafd',
             descricao: 'dasfdasf',
+            categoriaId: null,
             unidadeMedida: 'METRICA',
             valorAtacado: 10,
             valorVarejo: 10,
@@ -63,6 +65,7 @@ describe('Create Categoria Use Case', () => {
                 numeracao,
                 nome: 'fafd',
                 descricao: 'dasfdasf',
+                categoriaId: null,
                 unidadeMedida: 'METRICA',
                 valorAtacado: 10,
                 valorVarejo: 10,

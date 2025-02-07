@@ -6,8 +6,8 @@ import { ProdutoAlreadyExistsError } from "./errors/produto-already-exists";
 interface CreateProdutoUseCaseRequest {
     numeracao: string;
     nome: string;
-    descricao?: string;
-    categoriaId?: string;
+    descricao: string | null
+    categoriaId: string | null //passar null em valores opcionais
     unidadeMedida: string;
     valorAtacado: number;
     valorVarejo: number;
