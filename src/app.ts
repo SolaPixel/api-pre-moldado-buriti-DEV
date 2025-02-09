@@ -2,8 +2,14 @@ import fastify from "fastify"; // importando fastify
 import { appRoutes } from "./http/routes";
 import { ZodError } from "zod";
 import { env } from "./env";
+import cors  from '@fastify/cors'
 
 export const app = fastify() // instanciando funções do fastify no objeto app
+
+app.register(cors, {
+    origin: "*", // Permite todas as origens (substitua por uma específica em produção)
+    methods: ["GET", "POST", "PUT", "DELETE"], // Métodos permitidos
+  });
 
 //ativação das rotas importadas
 app.register(appRoutes)

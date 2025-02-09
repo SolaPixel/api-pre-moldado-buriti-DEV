@@ -15,7 +15,7 @@ import { getProduto } from "./controllers/get-produto";
 import { updateProduto } from "./controllers/update-produto";
 import { deleteProduto } from "./controllers/delete-produto";
 
-//função com rota post (instancia de fastify) com função de registrar categorias vindo de controller
+//função responsável por instanciar rotas vindo de controller
 export async function appRoutes(app: FastifyInstance) {
 
     app.post('/categorias', createCategoria)

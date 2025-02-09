@@ -29,6 +29,5 @@ Pré moldado Buriti App
 ## RNFs
 
 - [x] Os dados da aplicação precisam estar persistidos em um banco postgreSQL
-- [ ] Toda entidade será listada por ordem de numeração
-- [ ] Todos os casos de uso deverão ser acessados via requisição http
+- [x] Todos os casos de uso deverão ser acessados via requisição http
 - [ ] Todos os casos de uso deverão receber testes unitários recebendo repositórios em meória como parâmetros
