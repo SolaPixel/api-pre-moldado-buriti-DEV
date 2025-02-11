@@ -32,6 +32,16 @@ export class PrismaLotesRepository implements LotesRepository {
         return lote
     }
 
+    //listar por categoria
+    async findByProduto(produtoId: string) {
+
+        const lote = await prisma.lote.findMany({
+            where: { produtoId }
+        });
+
+        return lote
+    }
+
     async update(id: string, data: Prisma.LoteUncheckedUpdateInput) {
         const lote = await prisma.lote.update({
             where: { id },

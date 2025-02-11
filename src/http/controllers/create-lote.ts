@@ -15,7 +15,6 @@ export async function createLote(request: FastifyRequest, reply: FastifyReply) {
         validade: z.union([z.string().transform((val) => new Date(val)), z.date()]).nullable(),
         produtoId: z.string()
     });
-    
 
     // Faz o parse e valida os dados recebidos
     let {
