@@ -19,6 +19,10 @@ import { getLotesProduto } from "./controllers/get-lotes-produto";
 //função responsável por instanciar rotas vindo de controller
 export async function appRoutes(app: FastifyInstance) {
 
+    app.get('/', async (request, reply) => {
+        return { message: "Servidor está rodando!" };
+    });
+
     app.post('/categorias', createCategoria)
     app.get('/allCategorias', getAllCategorias)
     app.put('/categoriaInfo', updateCategoria )

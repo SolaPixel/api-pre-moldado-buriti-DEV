@@ -16,6 +16,7 @@ export class PrismaProdutosRepository implements ProdutosRepository {
     //buscar todos os produtos
     async findAll() {
         return await prisma.produto.findMany({
+            orderBy: { createdAt: 'desc' },
             include: { lotes: true, categoria: true }, // Retorna produtos com seus lotes e categoria
         });
     }
@@ -49,6 +50,7 @@ export class PrismaProdutosRepository implements ProdutosRepository {
 
         const produto = await prisma.produto.findMany({
             where: { categoriaId },
+            orderBy: { createdAt: 'desc' },
             include: { lotes: true, categoria: true }, // Inclui lotes e categoria na busca
         });
 

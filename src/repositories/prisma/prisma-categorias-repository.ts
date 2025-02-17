@@ -22,7 +22,9 @@ export class PrismaCategoriasRepository implements CategoriasRepository {
     }
 
     async findAll() {
-        return await prisma.categoria.findMany()
+        return await prisma.categoria.findMany({
+            orderBy: { createdAt: 'desc' },
+        })
     }
 
     async findById(id: string) {

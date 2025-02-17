@@ -15,9 +15,10 @@ datasource db {
 
 //tabela de categoria, a qual receberá um ou mais produtos
 model Categoria {
-  id       String    @id @default(uuid())
-  nome     String    @unique
-  produtos Produto[]
+  id        String    @id @default(uuid())
+  nome      String    @unique
+  createdAt DateTime  @default(now())
+  produtos  Produto[]
 
   @@map("categorias")
 }
@@ -33,7 +34,8 @@ model Produto {
   unidadeMedida UnidadeMedida //tipo de valor enum
   valorAtacado  Decimal       @db.Decimal(10, 2)
   valorVarejo   Decimal       @db.Decimal(10, 2)
-  quantEstoque  Int          @default(0) //  valor padrão 0
+  quantEstoque  Int           @default(0) //  valor padrão 0
+  createdAt     DateTime      @default(now())
   lotes         Lote[] //recebe todos os lotes relacionados
 
   @@map("produtos")
@@ -42,7 +44,7 @@ model Produto {
 //tabela de lotes
 model Lote {
   id             String    @id @default(uuid())
-  numeracao      String    
+  numeracao      String
   quantAdquirida Int
   quantAtual     Int
   dataAquisicao  DateTime

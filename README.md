@@ -17,6 +17,11 @@ Pré moldado Buriti App
 - [X] Deve ser possível obter todos os lotes de um produto
 - [x] Deve ser possível editar e excluir um lote
 
+- [ ] Deve ser possível cadastrar um orçamento
+- [ ] Deve ser possível cadastrar de forma automática um cliente no momento da criação do orçamento
+- [ ] Deve ser possível editar ou excluir um orçamento
+- [ ] Deve ser possível salvar o orçamento em pdf, para assinatura do cliente e vendedor
+
 
 ## RNs
 
@@ -24,10 +29,16 @@ Pré moldado Buriti App
 - [x] Não deve ser possível cadastrar duas ou mais categorias com o mesmo nome
 - [x] Cada registro de produto deve obter um campo "estoque" somando a quantidade cadastrada em cada lote
 - [x] Não se pode cadastrar um lote com numeração duplicada relacionado a um mesmo produto
-- [x] Ao cadastrar um lote, o campo "quantAtual" deve ser igual a quantInicial 
+
+- [ ] Deve ser possível selecionar um cliente previamente cadastrado durante o registro de um orçamento. 
+- [ ] Não deve ser possível cadastrar um orçamento com numeração duplicada
+- [ ] Ao aprovar um orçamento, a quantidade dos produtos inseridos devem ser descontados do estoque.
+- [ ] Não deve ser possível editar ou excluir um orçamento aprovado
+
 
 ## RNFs
 
+- [x] Ao cadastrar um lote, o campo "quantAtual" deve ser igual a quantInicial 
 - [x] Os dados da aplicação precisam estar persistidos em um banco postgreSQL
 - [x] Todos os casos de uso deverão ser acessados via requisição http
 - [ ] Todos os casos de uso deverão receber testes unitários recebendo repositórios em meória como parâmetros

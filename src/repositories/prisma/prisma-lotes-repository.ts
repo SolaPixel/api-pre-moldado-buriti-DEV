@@ -36,6 +36,7 @@ export class PrismaLotesRepository implements LotesRepository {
     async findByProduto(produtoId: string) {
 
         const lote = await prisma.lote.findMany({
+            orderBy: { dataAquisicao: 'desc' },
             where: { produtoId }
         });
 
@@ -53,7 +54,9 @@ export class PrismaLotesRepository implements LotesRepository {
 
 
     async delete(id: string) {
-        await prisma.lote.delete({ where: { id } });
+        await prisma.lote.delete({ 
+            where: { id } 
+        });
     }
 
 }

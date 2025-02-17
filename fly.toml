@@ -1,0 +1,31 @@
+# fly.toml app configuration file generated for pre-moldado-deploy-production on 2025-02-15T12:55:52-03:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'pre-moldado-deploy-production'
+primary_region = 'gru'
+
+[build]
+
+[deploy]
+
+[env]
+  PORT = '3000'
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+ auto_stop_machines = true  # Para instâncias inativas automaticamente
+  auto_start_machines = true # inicia máquinas automaticamente
+  min_machines_running = 0
+  processes = ['app']
+
+    [experimental]
+  disable_machine_autostart = true # Evita reinicializações inesperadas
+
+[[vm]]
+  memory = "256mb"
+  cpu_kind = 'shared'
+  cpus = 1
+

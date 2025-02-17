@@ -7,7 +7,7 @@ import { z } from 'zod' // métido "z" da biblioteca "zod" contendo todas as fun
 //esquema de validações
 const envSchema = z.object({
     NODE_ENV: z.enum(['dev', 'test', 'production']).default('dev'), 
-    PORT: z.coerce.number().default(3333), 
+    PORT: z.coerce.number().default(3000), 
 })
 
 const _env = envSchema.safeParse(process.env) // verifica se process.env possui as mesmas variáveis do esquema
