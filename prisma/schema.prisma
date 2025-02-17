@@ -23,7 +23,7 @@ model Categoria {
   @@map("categorias")
 }
 
-//tabela de produto
+//tabela de produto, que recebe lotes e suas declarações nos orçamentos
 model Produto {
   id            String        @id @default(uuid())
   numeracao     String        @unique
@@ -37,11 +37,13 @@ model Produto {
   quantEstoque  Int           @default(0) //  valor padrão 0
   createdAt     DateTime      @default(now())
   lotes         Lote[] //recebe todos os lotes relacionados
+  orcamentos OrcamentoProduto[]
+
 
   @@map("produtos")
 }
 
-//tabela de lotes
+//tabela de lotes que se relaciona a um produto
 model Lote {
   id             String    @id @default(uuid())
   numeracao      String
@@ -60,4 +62,61 @@ model Lote {
 enum UnidadeMedida {
   UNITARIA
   METRICA
+}
+
+//model de clientes, que recebe orçamentos
+model Cliente {
+  id         String      @id @default(uuid())
+  nome       String
+  endereco   String
+  telefone   String
+  cpf        String?     @unique
+  orcamentos Orcamento[]
+
+  @@map("clientes")
+}
+
+//model de orcamento querecebe cliente, além dos produtos com dados tratados para orçamento
+model Orcamento {
+  id               String             @id @default(uuid())
+  numeracao        String             @unique
+  createdAt        DateTime           @default(now())
+  modalidade       ModalidadeCompra
+  clienteId        String
+  cliente          Cliente            @relation(fields: [clienteId], references: [id])
+  produtos         OrcamentoProduto[]
+  valorTotal       Decimal            @db.Decimal(10, 2)
+  desconto         Decimal?           @db.Decimal(10, 2)
+  valorComDesconto Decimal            @db.Decimal(10, 2)
+  situacao         SituacaoOrcamento
+
+  @@map("orcamentos")
+}
+
+//model contendo produtos com dados tratados para serem vinculados ao orçamento
+model OrcamentoProduto {
+  id            String        @id @default(uuid())
+  orcamentoId   String
+  orcamento     Orcamento     @relation(fields: [orcamentoId], references: [id], onDelete: Cascade)
+  produtoId     String
+  produto       Produto       @relation(fields: [produtoId], references: [id])
+  quantidade    Int
+  modalidade    ModalidadeCompra
+  valorUnitario Decimal       @db.Decimal(10, 2)
+  valorTotal    Decimal       @db.Decimal(10, 2)
+
+  @@map("orcamento_produtos")
+}
+
+//esquema/tipo para valores aceitos em modalidade (OrcamentoProduto)
+enum ModalidadeCompra {
+  ATACADO
+  VAREJO
+}
+
+//esquema/tipo para valores aceitos em situação (orçamento)
+enum SituacaoOrcamento {
+  CANCELADO
+  PENDENTE
+  APROVADO
 }
