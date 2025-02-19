@@ -17,8 +17,9 @@ Pré moldado Buriti App
 - [X] Deve ser possível obter todos os lotes de um produto
 - [x] Deve ser possível editar e excluir um lote
 
-- [ ] Deve ser possível cadastrar um orçamento
+- [x] Deve ser possível cadastrar um orçamento
 - [x] Deve ser possível cadastrar um cliente
+- [x] Deve ser possível obter todos os orçamentos
 - [ ] Deve ser possível editar ou excluir um orçamento
 - [ ] Deve ser possível salvar o orçamento em pdf, para assinatura do cliente e vendedor
 
@@ -30,8 +31,8 @@ Pré moldado Buriti App
 - [x] Cada registro de produto deve obter um campo "estoque" somando a quantidade cadastrada em cada lote
 - [x] Não se pode cadastrar um lote com numeração duplicada relacionado a um mesmo produto
 
-- [ ] Deve ser possível selecionar um cliente previamente cadastrado durante o registro de um orçamento. 
-- [ ] Não deve ser possível cadastrar um orçamento com numeração duplicada
+- [x] Deve ser possível selecionar um cliente previamente cadastrado durante o registro de um orçamento. 
+- [x] Não deve ser possível cadastrar um orçamento com numeração duplicada
 - [ ] Ao aprovar um orçamento, a quantidade dos produtos inseridos devem ser descontados do estoque.
 - [ ] Não deve ser possível editar ou excluir um orçamento aprovado
 

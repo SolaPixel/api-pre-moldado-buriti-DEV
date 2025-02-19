@@ -25,20 +25,19 @@ model Categoria {
 
 //tabela de produto, que recebe lotes e suas declarações nos orçamentos
 model Produto {
-  id            String        @id @default(uuid())
-  numeracao     String        @unique
+  id            String             @id @default(uuid())
+  numeracao     String             @unique
   nome          String
   descricao     String?
   categoriaId   String?
-  categoria     Categoria?    @relation(fields: [categoriaId], references: [id], onDelete: SetNull)
+  categoria     Categoria?         @relation(fields: [categoriaId], references: [id], onDelete: SetNull)
   unidadeMedida UnidadeMedida //tipo de valor enum
-  valorAtacado  Decimal       @db.Decimal(10, 2)
-  valorVarejo   Decimal       @db.Decimal(10, 2)
-  quantEstoque  Int           @default(0) //  valor padrão 0
-  createdAt     DateTime      @default(now())
+  valorAtacado  Decimal            @db.Decimal(10, 2)
+  valorVarejo   Decimal            @db.Decimal(10, 2)
+  quantEstoque  Int                @default(0) //  valor padrão 0
+  createdAt     DateTime           @default(now())
   lotes         Lote[] //recebe todos os lotes relacionados
-  orcamentos OrcamentoProduto[]
-
+  orcamentos    OrcamentoProduto[]
 
   @@map("produtos")
 }
@@ -81,29 +80,28 @@ model Orcamento {
   id               String             @id @default(uuid())
   numeracao        String             @unique
   createdAt        DateTime           @default(now())
-  modalidade       ModalidadeCompra
   clienteId        String
   cliente          Cliente            @relation(fields: [clienteId], references: [id])
   produtos         OrcamentoProduto[]
   valorTotal       Decimal            @db.Decimal(10, 2)
   desconto         Decimal?           @db.Decimal(10, 2)
   valorComDesconto Decimal            @db.Decimal(10, 2)
-  situacao         SituacaoOrcamento
+  situacao         SituacaoOrcamento  @default(PENDENTE)
 
   @@map("orcamentos")
 }
 
 //model contendo produtos com dados tratados para serem vinculados ao orçamento
 model OrcamentoProduto {
-  id            String        @id @default(uuid())
+  id            String           @id @default(uuid())
   orcamentoId   String
-  orcamento     Orcamento     @relation(fields: [orcamentoId], references: [id], onDelete: Cascade)
+  orcamento     Orcamento        @relation(fields: [orcamentoId], references: [id], onDelete: Cascade)
   produtoId     String
-  produto       Produto       @relation(fields: [produtoId], references: [id])
+  produto       Produto          @relation(fields: [produtoId], references: [id])
   quantidade    Int
   modalidade    ModalidadeCompra
-  valorUnitario Decimal       @db.Decimal(10, 2)
-  valorTotal    Decimal       @db.Decimal(10, 2)
+  valorUnitario Decimal          @db.Decimal(10, 2)
+  valorTotal    Decimal          @db.Decimal(10, 2)
 
   @@map("orcamento_produtos")
 }

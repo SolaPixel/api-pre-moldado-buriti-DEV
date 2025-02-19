@@ -15,6 +15,9 @@ import { getProduto } from "./controllers/get-produto";
 import { updateProduto } from "./controllers/update-produto";
 import { deleteProduto } from "./controllers/delete-produto";
 import { getLotesProduto } from "./controllers/get-lotes-produto";
+import { createCliente } from "./controllers/create-cliente";
+import { createOrcamento } from "./controllers/create-orcamento";
+import { updateOrcamento } from "./controllers/update-orcamento";
 
 //função responsável por instanciar rotas vindo de controller
 export async function appRoutes(app: FastifyInstance) {
@@ -39,4 +42,9 @@ export async function appRoutes(app: FastifyInstance) {
     app.post('/lotes', createLote)
     app.put('/loteInfo', updateLote)
     app.delete('/lote/:id', deleteLote)
+
+    app.post('/clientes', createCliente)
+
+    app.post('/orcamentos', createOrcamento)
+    app.put('/orcamentoInfo', updateOrcamento)
 }
