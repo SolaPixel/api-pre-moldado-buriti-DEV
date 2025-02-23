@@ -25,6 +25,7 @@ export class GetProdutoUseCase {
         //faz a requizição para o repositório
         const produto = await this.produtosRepository.findById(produtoId)
 
+
         //caso não encontre um produto
         if(!produto) {
             throw new ResourseNotFoundError

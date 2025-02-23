@@ -20,6 +20,7 @@ Pré moldado Buriti App
 - [x] Deve ser possível cadastrar um orçamento
 - [x] Deve ser possível cadastrar um cliente
 - [x] Deve ser possível obter todos os orçamentos
+- [ ] Deve ser possível alterar situação do orçamento
 - [ ] Deve ser possível editar ou excluir um orçamento
 - [ ] Deve ser possível salvar o orçamento em pdf, para assinatura do cliente e vendedor
 

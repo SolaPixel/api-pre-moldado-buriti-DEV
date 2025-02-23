@@ -9,7 +9,7 @@ interface UpdateOrcamentoUseCaseRequest {
     numeracao?: string;
     clienteId?: string;
     produtos?: {
-        id: string;
+        id?: string;
         produtoId?: string;
         quantidade?: number;
         modalidade?: "ATACADO" | "VAREJO";
@@ -62,14 +62,26 @@ export class UpdateOrcamentoUseCase {
             numeracao,
             clienteId,
             produtos: produtos ? {
-                updateMany: produtos.map(produto => ({
+                updateMany: produtos
+                .filter(produto => produto.id)
+                .map(produto => ({
                     where: { id: produto.id },
                     data: {
+                        produtoId: produto.produtoId,
                         quantidade: produto.quantidade,
                         modalidade: produto.modalidade,
                         valorUnitario: produto.valorUnitario,
                         valorTotal: produto.valorTotal,
                     },
+                })),
+                create: produtos
+                .filter(produto => !produto.id)
+                .map(produto => ({
+                    produtoId: produto.produtoId ?? "", // Garante que produtoId não seja undefined
+                    quantidade: produto.quantidade ?? 0,
+                    modalidade: produto.modalidade ?? "VAREJO",
+                    valorUnitario: produto.valorUnitario ?? 0,
+                    valorTotal: produto.valorTotal ?? 0,
                 })),
             } : undefined,
             valorTotal,

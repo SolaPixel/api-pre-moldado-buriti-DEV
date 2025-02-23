@@ -10,7 +10,7 @@ export async function updateOrcamento(request: FastifyRequest, reply: FastifyRep
         numeracao: z.string().optional(),
         clienteId: z.string().optional(),
         produtos: z.array(z.object({
-            id: z.string(),
+            id: z.string().optional(),
             produtoId: z.string().optional(),
             quantidade: z.number().optional(),
             modalidade: z.enum(["ATACADO", "VAREJO"]).optional(),
@@ -53,5 +53,5 @@ export async function updateOrcamento(request: FastifyRequest, reply: FastifyRep
         throw err;
     }
 
-    return reply.status(201).send();
+    return reply.status(204).send();
 }

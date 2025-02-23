@@ -7,4 +7,5 @@ export interface OrcamentosRepository {
     create(data: Prisma.OrcamentoUncheckedCreateInput): Promise<Orcamento>; // Criar um novo orçamento
     findAll(): Promise<Orcamento[]>; // listar todos os orçamentos
     update(id: string, data: Prisma.OrcamentoUncheckedUpdateInput): Promise<Orcamento>;
+    updateSituacao(id: string, data: Prisma.OrcamentoUncheckedUpdateInput): Promise<Orcamento>
 }
