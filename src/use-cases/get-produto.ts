@@ -1,40 +1,62 @@
 import { ProdutosRepository } from "@/repositories/produtos-repository";
-import { Produto } from "@prisma/client";
+import { Produto, Lote, OrcamentoProduto, Orcamento } from "@prisma/client";
 import { ResourseNotFoundError } from "./errors/resourse-not-found-error";
 
-//para tipar parametro do execute com todos os dados que virão para o caso de uso
+// Interface para tipar os parâmetros da requisição
 interface GetProdutoUseCaseRequest {
-    produtoId: string
+    produtoId: string;
 }
 
-//tipando o retorno
+// Interface para tipar a resposta, incluindo os cálculos adicionais
 interface GetProdutoUseCaseResponse {
-    produto: Produto;
+    produto: ProdutoComEstoque;
 }
 
-//classe contendo caso de uso independente responsável por receber dados do controller 
-// e encamhinhar para devidos repositórios
+// Definição de um tipo que inclui os relacionamentos da tabela Produto
+type ProdutoComRelacionamentos = Produto & {
+    lotes: Lote[]; // Lista de lotes do produto
+    orcamentos: (OrcamentoProduto & { orcamento: Orcamento })[]; // Lista de produtos em orçamentos, incluindo os orçamentos relacionados
+};
+
+// Tipo do retorno do produto com os cálculos adicionais
+type ProdutoComEstoque = ProdutoComRelacionamentos & {
+    totalQuantAdquirida: number;
+    totalQuantVendido: number;
+    quantEstoque: number;
+};
+
+// Classe do caso de uso para buscar um único produto
 export class GetProdutoUseCase {
+    constructor(private produtosRepository: ProdutosRepository) {} // Injeta o repositório de produtos
 
-    //construtor para receber repositório via parâmetro
-    constructor(private produtosRepository: ProdutosRepository) { }
+    async execute({ produtoId }: GetProdutoUseCaseRequest): Promise<GetProdutoUseCaseResponse> {
+        // Busca o produto no repositório, garantindo que os relacionamentos estejam incluídos
+        const produto = await this.produtosRepository.findById(produtoId) as ProdutoComRelacionamentos;
 
-    //execução do caso de uso com suas devidas tipagens
-    async execute({produtoId}: GetProdutoUseCaseRequest): Promise<GetProdutoUseCaseResponse> {
-
-        //faz a requizição para o repositório
-        const produto = await this.produtosRepository.findById(produtoId)
-
-
-        //caso não encontre um produto
-        if(!produto) {
-            throw new ResourseNotFoundError
+        // Caso o produto não seja encontrado, lança um erro
+        if (!produto) {
+            throw new ResourseNotFoundError();
         }
 
-        //devolvendo produto
+        // Calcula a quantidade total adquirida nos lotes do produto
+        const totalQuantAdquirida = produto.lotes.reduce((total, lote) => total + lote.quantAdquirida, 0);
+
+        // Calcula a quantidade total vendida considerando apenas orçamentos aprovados
+        const totalQuantVendido = produto.orcamentos
+            .filter(op => op.orcamento.situacao === "APROVADO") // Filtra apenas orçamentos aprovados
+            .reduce((total, op) => total + op.quantidade, 0); // Soma as quantidades vendidas
+
+        // Calcula a quantidade disponível em estoque
+        const quantEstoque = totalQuantAdquirida - totalQuantVendido;
+
+        // Retorna o produto com os novos campos calculados
         return {
-            produto
+            produto: {
+                ...produto, // Mantém os dados originais do produto
+                totalQuantAdquirida, // Adiciona o total adquirido
+                totalQuantVendido, // Adiciona o total vendido
+                quantEstoque // Adiciona a quantidade disponível em estoque
+            }
         };
     }
-
 }

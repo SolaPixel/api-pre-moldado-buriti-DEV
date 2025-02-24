@@ -1,48 +1,77 @@
 import { ProdutosRepository } from "@/repositories/produtos-repository";
-import { Categoria, Produto } from "@prisma/client";
-import { ResourseNotFoundError } from "./errors/resourse-not-found-error";
 import { CategoriasRepository } from "@/repositories/categorias-repository";
+import { Categoria, Produto, Lote, OrcamentoProduto, Orcamento } from "@prisma/client";
+import { ResourseNotFoundError } from "./errors/resourse-not-found-error";
 
-//para tipar parametro do execute com todos os dados que virão para o caso de uso
+// Interface para tipar os parâmetros da requisição
 interface GetProdutosCategoriaUseCaseRequest {
-    categoriaId: string
+    categoriaId: string;
 }
 
-//tipando o retorno
+// Interface para tipar a resposta, incluindo os cálculos adicionais
 interface GetProdutosCategoriaUseCaseResponse {
-    produtos: Produto[];
-    categoria: Categoria
+    produtos: ProdutoComEstoque[];
+    categoria: Categoria;
 }
 
-//classe contendo caso de uso independente responsável por receber dados do controller 
-// e encamhinhar para devidos repositórios
-export class GetProdutosCategoriaUseCase {
+// Definição de um tipo que inclui os relacionamentos da tabela Produto
+type ProdutoComRelacionamentos = Produto & {
+    lotes: Lote[]; // Lista de lotes do produto
+    orcamentos: (OrcamentoProduto & { orcamento: Orcamento })[]; // Lista de produtos em orçamentos, incluindo os orçamentos relacionados
+};
 
-    //construtor para receber repositório via parâmetro
+// Tipo do retorno do produto com os cálculos adicionais
+type ProdutoComEstoque = ProdutoComRelacionamentos & {
+    totalQuantAdquirida: number;
+    totalQuantVendido: number;
+    quantEstoque: number;
+};
+
+// Classe do caso de uso para buscar produtos de uma categoria
+export class GetProdutosCategoriaUseCase {
     constructor(
         private produtosRepository: ProdutosRepository,
         private categoriasRepository: CategoriasRepository
-    ) { }
+    ) {}
 
-    //execução do caso de uso com suas devidas tipagens
-    async execute({categoriaId}: GetProdutosCategoriaUseCaseRequest): Promise<GetProdutosCategoriaUseCaseResponse> {
+    async execute({ categoriaId }: GetProdutosCategoriaUseCaseRequest): Promise<GetProdutosCategoriaUseCaseResponse> {
+        // Busca a categoria no repositório
+        const categoria = await this.categoriasRepository.findById(categoriaId);
 
-
-        const categoria = await this.categoriasRepository.findById(categoriaId)
-
-        //faz a requizição para o repositório
-        const produtos = await this.produtosRepository.findByCategoria(categoriaId)
-
-        //caso não encontre um produto
-        if(!categoria) {
-            throw new ResourseNotFoundError
+        // Caso a categoria não seja encontrada, lança um erro
+        if (!categoria) {
+            throw new ResourseNotFoundError();
         }
 
-        //devolvendo produtos e categoria
+        // Busca os produtos da categoria no repositório
+        const produtos = await this.produtosRepository.findByCategoria(categoriaId) as ProdutoComRelacionamentos[];
+
+        // Mapeia os produtos, adicionando os cálculos de estoque
+        const produtosComEstoque = produtos.map(produto => {
+            // Calcula a quantidade total adquirida nos lotes do produto
+            const totalQuantAdquirida = produto.lotes.reduce((total, lote) => total + lote.quantAdquirida, 0);
+
+            // Calcula a quantidade total vendida considerando apenas orçamentos aprovados
+            const totalQuantVendido = produto.orcamentos
+                .filter(op => op.orcamento.situacao === "APROVADO") // Filtra apenas orçamentos aprovados
+                .reduce((total, op) => total + op.quantidade, 0); // Soma as quantidades vendidas
+
+            // Calcula a quantidade disponível em estoque
+            const quantEstoque = totalQuantAdquirida - totalQuantVendido;
+
+            // Retorna o produto com os novos campos calculados
+            return {
+                ...produto, 
+                totalQuantAdquirida, 
+                totalQuantVendido, 
+                quantEstoque
+            };
+        });
+
+        // Retorna a lista de produtos com os cálculos e a categoria
         return {
-            produtos,
+            produtos: produtosComEstoque,
             categoria
         };
     }
-
 }

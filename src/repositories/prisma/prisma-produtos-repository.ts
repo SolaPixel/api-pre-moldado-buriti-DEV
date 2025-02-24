@@ -14,19 +14,42 @@ export class PrismaProdutosRepository implements ProdutosRepository {
     }
 
     //buscar todos os produtos
+    // Buscar todos os produtos com soma de quantAdquirida dos lotes
     async findAll() {
-        return await prisma.produto.findMany({
+        const produtos = await prisma.produto.findMany({
             orderBy: { createdAt: 'desc' },
-            include: { lotes: true, categoria: true }, // Retorna produtos com seus lotes e categoria
+            include: { 
+                lotes: true, 
+                categoria: true, 
+                orcamentos: {
+                    include: {
+                        orcamento: true // Inclui os detalhes do orçamento relacionado
+                    }
+                }
+            }
         });
+    
+        return produtos
     }
+    
+    
+    
+
 
 
     // listar produto por id
     async findById(id: string) {
         const produto = await prisma.produto.findUnique({
             where: { id },
-            include: { lotes: true, categoria: true }, // Inclui lotes e categoria na busca
+            include: { 
+                lotes: true, 
+                categoria: true, 
+                orcamentos: {
+                    include: {
+                        orcamento: true // Inclui os detalhes do orçamento relacionado
+                    }
+                }
+            }
         });
 
         return produto
@@ -51,7 +74,15 @@ export class PrismaProdutosRepository implements ProdutosRepository {
         const produto = await prisma.produto.findMany({
             where: { categoriaId },
             orderBy: { createdAt: 'desc' },
-            include: { lotes: true, categoria: true }, // Inclui lotes e categoria na busca
+            include: { 
+                lotes: true, 
+                categoria: true, 
+                orcamentos: {
+                    include: {
+                        orcamento: true // Inclui os detalhes do orçamento relacionado
+                    }
+                }
+            }, // Inclui lotes e categoria na busca
         });
 
         return produto

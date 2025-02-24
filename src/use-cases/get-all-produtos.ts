@@ -1,16 +1,41 @@
 import { ProdutosRepository } from "@/repositories/produtos-repository"
-import { Produto } from "@prisma/client"
+import { Produto, Lote, OrcamentoProduto, Orcamento } from "@prisma/client"
 
-//classe com objetivo de listar todas as categoririas
+// Definição de um tipo que inclui os relacionamentos da tabela Produto
+type ProdutoComRelacionamentos = Produto & {
+    lotes: Lote[]; // Lista de lotes relacionados ao produto
+    orcamentos: (OrcamentoProduto & { orcamento: Orcamento })[]; // Lista de produtos em orçamentos, incluindo o orçamento relacionado
+};
+
 export class GetAllProdutos {
-    constructor(private produtosRepository: ProdutosRepository) {} // recebe repositório do controller
+    constructor(private produtosRepository: ProdutosRepository) {} 
 
-    //solicida as produtos para o repositório e as armazena em variável
-    async execute(): Promise<{produtos: Produto[]}> {
-        const produtos = await this.produtosRepository.findAll()
+    async execute(): Promise<{ produtos: ProdutoComRelacionamentos[] }> {
+        // Busca os produtos no repositório, garantindo que os relacionamentos estejam incluídos
+        const produtos = await this.produtosRepository.findAll() as ProdutoComRelacionamentos[];
 
-        return {
-            produtos
-        }
+        // Processa cada produto para calcular quantidades e estoque
+        const produtosComEstoque = produtos.map(produto => {
+            // Soma total de unidades adquiridas em todos os lotes do produto
+            const totalQuantAdquirida = produto.lotes.reduce((total, lote) => total + lote.quantAdquirida, 0);
+
+            // Soma total de unidades vendidas apenas dos orçamentos que foram aprovados
+            const totalQuantVendido = produto.orcamentos
+                .filter(op => op.orcamento.situacao === "APROVADO")
+                .reduce((total, op) => total + op.quantidade, 0); 
+
+            // Calcula o estoque disponível
+            const quantEstoque = totalQuantAdquirida - totalQuantVendido;
+
+            // Retorna o produto com os novos campos calculados
+            return {
+                ...produto,
+                totalQuantAdquirida, 
+                totalQuantVendido, 
+                quantEstoque 
+            };
+        });
+
+        return { produtos: produtosComEstoque }; // Retorna os produtos com os cálculos adicionais
     }
 }
