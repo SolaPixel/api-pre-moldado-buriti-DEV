@@ -1,4 +1,4 @@
-import { ProdutosRepository } from "@/repositories/produtos-repository";
+
 import { LotesRepository } from "@/repositories/lotes-repository";
 import { ResourseNotFoundError } from "./errors/resourse-not-found-error";
 
@@ -11,7 +11,7 @@ interface DeleteLoteUseCaseRequest {
 export class DeleteLoteUseCase {
     constructor(
         private lotesRepository: LotesRepository,
-        private produtosRepository: ProdutosRepository
+        // private produtosRepository: ProdutosRepository
     ) {}
 
     async execute({ id }: DeleteLoteUseCaseRequest): Promise<void> {
@@ -29,7 +29,7 @@ export class DeleteLoteUseCase {
         await this.lotesRepository.delete(id);
 
         // Atualiza o estoque do produto após deletar o  lote
-        await this.produtosRepository.atualizarQuantEstoque(produtoId);
+        // await this.produtosRepository.atualizarQuantEstoque(produtoId);
 
     }
 }

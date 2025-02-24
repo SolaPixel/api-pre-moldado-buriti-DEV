@@ -21,7 +21,7 @@ Pré moldado Buriti App
 - [x] Deve ser possível cadastrar um cliente
 - [x] Deve ser possível obter todos os orçamentos
 - [x] Deve ser possível alterar situação do orçamento
-- [ ] Deve ser possível editar ou excluir um orçamento
+- [x] Deve ser possível editar ou excluir um orçamento
 - [ ] Deve ser possível salvar o orçamento em pdf, para assinatura do cliente e vendedor
 
 
@@ -35,8 +35,10 @@ Pré moldado Buriti App
 - [x] Deve ser possível selecionar um cliente previamente cadastrado durante o registro de um orçamento. 
 - [x] Não deve ser possível cadastrar um orçamento com numeração duplicada
 - [x] Ao aprovar um orçamento, a quantidade dos produtos inseridos devem ser descontados do estoque.
-- [ ] Ao listar um produto, o campo quantEstoque deve conter a subtração entre a soma dos campos "quantAquirira" de todos os lotes com a soma de "quantidade" de todos os "orcamentoProdutos" relacionados a orçamentos aprovados
-- [ ] Não deve ser possível editar ou excluir um orçamento aprovado
+- [x] toda listagem de produto deve conter o total de unidades adquiridas em todos os lotes do produto
+- [x] toda listagem de produto deve conter o total de unidades relacionadas aos orçamentos aprovados
+- [x] toda listagem de produto deve conter a quantidade de estoque disponível
+- [x] Não deve ser possível editar ou excluir um orçamento aprovado
 
 
 ## RNFs

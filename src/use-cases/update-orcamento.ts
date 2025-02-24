@@ -3,6 +3,7 @@ import { OrcamentosRepository } from "@/repositories/orcamentos-repository";
 import { Orcamento } from "@prisma/client";
 import { OrcamentoAlreadyExistsError } from "./errors/orcamento-already-exists";
 import { ResourseNotFoundError } from "./errors/resourse-not-found-error";
+import { CannotToOperateOrcamentoAprovadoError } from "./errors/cannot-to-operate-orcameto-aprovado";
 
 interface UpdateOrcamentoUseCaseRequest {
     id: string,
@@ -45,7 +46,7 @@ export class UpdateOrcamentoUseCase {
         }
 
         if (orcamento.situacao === "APROVADO") {
-            throw new Error("Não é possível editar um orçamento aprovado.");
+            throw new CannotToOperateOrcamentoAprovadoError()
         }
 
         if (numeracao) {

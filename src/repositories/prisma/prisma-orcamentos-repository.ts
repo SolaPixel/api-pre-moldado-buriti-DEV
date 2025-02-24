@@ -63,4 +63,8 @@ export class PrismaOrcamentosRepository implements OrcamentosRepository {
 
         return orcamento
     }
+
+    async delete(id: string) {
+        await prisma.orcamento.delete({ where: { id } });
+    }
 }
