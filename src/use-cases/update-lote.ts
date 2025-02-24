@@ -1,8 +1,7 @@
 import { LotesRepository } from "@/repositories/lotes-repository";
-import { Lote, Produto } from "@prisma/client";
+import { Lote } from "@prisma/client";
 import { LoteAlreadyExistsError } from "./errors/lote-already-exists";
 import { ResourseNotFoundError } from "./errors/resourse-not-found-error";
-import { ProdutosRepository } from "@/repositories/produtos-repository";
 
 //para tipar parametro do execute com todos os dados que virão para o caso de uso
 interface UpdateLoteUseCaseRequest {
@@ -19,7 +18,6 @@ interface UpdateLoteUseCaseRequest {
 //tipando o retorno
 interface UpdateLoteUseCaseResponse {
     lote: Lote;
-    produto: Produto
 }
 
 
@@ -30,7 +28,7 @@ export class UpdateLoteUseCase {
     //construtor para receber repositório via parâmetro
     constructor(
         private lotesRepository: LotesRepository,
-        private produtosRepository: ProdutosRepository
+        // private produtosRepository: ProdutosRepository
     ) { }
 
 
@@ -77,12 +75,11 @@ export class UpdateLoteUseCase {
         });
 
         // Atualiza o estoque do produto após a criação do lote
-        const produto = await this.produtosRepository.atualizarQuantEstoque(produtoId);
+        // const produto = await this.produtosRepository.atualizarQuantEstoque(produtoId);
 
         //devolvendo lote para possíveis testes
         return {
-            lote: updateLote,
-            produto
+            lote: updateLote
         };
     }
 

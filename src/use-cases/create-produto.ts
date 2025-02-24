@@ -11,7 +11,6 @@ interface CreateProdutoUseCaseRequest {
     unidadeMedida: string;
     valorAtacado: number;
     valorVarejo: number;
-    quantEstoque: number
 }
 
 //tipando o retorno
@@ -34,8 +33,7 @@ export class CreateProdutoUseCase {
         categoriaId,
         unidadeMedida,
         valorAtacado,
-        valorVarejo,
-        quantEstoque,
+        valorVarejo
 
     }: CreateProdutoUseCaseRequest): Promise<CreateProdutoUseCaseResponse> {
 
@@ -55,7 +53,6 @@ export class CreateProdutoUseCase {
             unidadeMedida: unidadeMedida as any, // Conversão para ENUM,
             valorAtacado,
             valorVarejo,
-            quantEstoque
         });
 
         

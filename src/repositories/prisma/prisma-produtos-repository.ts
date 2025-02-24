@@ -66,19 +66,19 @@ export class PrismaProdutosRepository implements ProdutosRepository {
         return produto
     }
 
-    async atualizarQuantEstoque(produtoId: string) {
-        const soma = await prisma.lote.aggregate({
-            where: { produtoId },
-            _sum: { quantAtual: true },
-        });
+    // async atualizarQuantEstoque(produtoId: string) {
+    //     const soma = await prisma.lote.aggregate({
+    //         where: { produtoId },
+    //         _sum: { quantAtual: true },
+    //     });
 
-        const produto = await prisma.produto.update({
-            where: { id: produtoId },
-            data: { quantEstoque: soma._sum.quantAtual || 0 },
-        });
+    //     const produto = await prisma.produto.update({
+    //         where: { id: produtoId },
+    //         data: { quantEstoque: soma._sum.quantAtual || 0 },
+    //     });
 
-        return produto
-    }
+    //     return produto
+    // }
 
     async delete(id: string) {
         await prisma.produto.delete({ where: { id } });

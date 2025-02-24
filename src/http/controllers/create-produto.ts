@@ -13,8 +13,7 @@ export async function createProduto(request: FastifyRequest, reply: FastifyReply
         categoriaId: z.string().nullable(),
         unidadeMedida: z.enum(["METRICA", "UNITARIA"]), // Suporte a enum
         valorAtacado: z.number(),
-        valorVarejo: z.number(),
-        quantEstoque: z.number().optional().default(0)
+        valorVarejo: z.number()
     });
 
     // Faz o parse e valida os dados recebidos
@@ -25,8 +24,7 @@ export async function createProduto(request: FastifyRequest, reply: FastifyReply
         categoriaId,
         unidadeMedida,
         valorAtacado,
-        valorVarejo,
-        quantEstoque
+        valorVarejo
     } = createProdutoBodySchema.parse(request.body);
 
     try {
@@ -41,8 +39,7 @@ export async function createProduto(request: FastifyRequest, reply: FastifyReply
             categoriaId,
             unidadeMedida,
             valorAtacado,
-            valorVarejo,
-            quantEstoque
+            valorVarejo
         });
 
     } catch (err) {

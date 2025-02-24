@@ -34,7 +34,6 @@ model Produto {
   unidadeMedida UnidadeMedida //tipo de valor enum
   valorAtacado  Decimal            @db.Decimal(10, 2)
   valorVarejo   Decimal            @db.Decimal(10, 2)
-  quantEstoque  Int                @default(0) //  valor padrão 0
   createdAt     DateTime           @default(now())
   lotes         Lote[] //recebe todos os lotes relacionados
   orcamentos    OrcamentoProduto[]
