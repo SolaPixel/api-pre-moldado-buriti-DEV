@@ -19,6 +19,8 @@ import { createCliente } from "./controllers/create-cliente";
 import { createOrcamento } from "./controllers/create-orcamento";
 import { updateOrcamento } from "./controllers/update-orcamento";
 import { updateSituacaoOrcamento } from "./controllers/update-siruacao-orcamento";
+import { getAllOrcamentos } from "./controllers/get-all-orcamentos";
+import { deleteOrcamento } from "./controllers/delete-orcamento";
 
 //função responsável por instanciar rotas vindo de controller
 export async function appRoutes(app: FastifyInstance) {
@@ -47,6 +49,8 @@ export async function appRoutes(app: FastifyInstance) {
     app.post('/clientes', createCliente)
 
     app.post('/orcamentos', createOrcamento)
+    app.get('/allOrcamentos', getAllOrcamentos)
     app.put('/orcamentoInfo', updateOrcamento)
     app.patch('/orcamentoSituacao', updateSituacaoOrcamento)
+    app.delete('/orcamento/:id', deleteOrcamento)
 }

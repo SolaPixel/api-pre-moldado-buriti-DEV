@@ -19,9 +19,9 @@ Pré moldado Buriti App
 
 - [x] Deve ser possível cadastrar um orçamento
 - [x] Deve ser possível cadastrar um cliente
-- [x] Deve ser possível obter todos os orçamentos
+- [x] Deve ser possível obter todos os orçamentos 
 - [x] Deve ser possível alterar situação do orçamento
-- [x] Deve ser possível editar ou excluir um orçamento
+- [x] Deve ser possível editar ou excluir um orçamento 
 - [ ] Deve ser possível salvar o orçamento em pdf, para assinatura do cliente e vendedor
 
 
@@ -48,4 +48,4 @@ Pré moldado Buriti App
 - [x] Todos os casos de uso referentes ao módulo de produtos deverão ser acessados via requisição http
 - [ ] Todos os casos de uso deverão receber testes unitários recebendo repositórios em meória como parâmetros
 
-- [ ] Todos os casos de uso referentes ao módulo de orçamentos deverão ser acessados via requisição http
+- [X] Todos os casos de uso referentes ao módulo de orçamentos deverão ser acessados via requisição http
