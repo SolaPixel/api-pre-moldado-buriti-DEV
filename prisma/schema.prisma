@@ -25,18 +25,19 @@ model Categoria {
 
 //tabela de produto, que recebe lotes e suas declarações nos orçamentos
 model Produto {
-  id            String             @id @default(uuid())
-  numeracao     String             @unique
+  id            String        @id @default(uuid())
+  numeracao     String        @unique
   nome          String
   descricao     String?
   categoriaId   String?
-  categoria     Categoria?         @relation(fields: [categoriaId], references: [id], onDelete: SetNull)
+  categoria     Categoria?    @relation(fields: [categoriaId], references: [id], onDelete: SetNull)
   unidadeMedida UnidadeMedida //tipo de valor enum
-  valorAtacado  Decimal            @db.Decimal(10, 2)
-  valorVarejo   Decimal            @db.Decimal(10, 2)
-  createdAt     DateTime           @default(now())
+  valorAtacado  Decimal       @db.Decimal(10, 2)
+  valorVarejo   Decimal       @db.Decimal(10, 2)
+  createdAt     DateTime      @default(now())
   lotes         Lote[] //recebe todos os lotes relacionados
-  orcamentos    OrcamentoProduto[]
+
+  orcamentos OrcamentoProduto[]
 
   @@map("produtos")
 }
@@ -86,6 +87,7 @@ model Orcamento {
   desconto         Decimal?           @db.Decimal(10, 2)
   valorComDesconto Decimal            @db.Decimal(10, 2)
   situacao         SituacaoOrcamento  @default(PENDENTE)
+  Venda            Venda[]
 
   @@map("orcamentos")
 }
@@ -101,6 +103,7 @@ model OrcamentoProduto {
   modalidade    ModalidadeCompra
   valorUnitario Decimal          @db.Decimal(10, 2)
   valorTotal    Decimal          @db.Decimal(10, 2)
+  Devolucoes DevolucaoProduto[]
 
   @@map("orcamento_produtos")
 }
@@ -116,4 +119,58 @@ enum SituacaoOrcamento {
   CANCELADO
   PENDENTE
   APROVADO
+}
+
+// model de venda que se relaciona com um orçamento 
+model Venda {
+  id             String         @id @default(uuid())
+  numeracao      String         @unique
+  createdAt      DateTime       @default(now())
+  orcamentoId    String         @unique
+  orcamento      Orcamento      @relation(fields: [orcamentoId], references: [id])
+  formaPagamento FormaPagamento
+  parcelas       Parcela[]
+  devolucoes     Devolucao[]
+
+  @@map("vendas")
+}
+
+//parcelas que se relacionam com uma única venda
+model Parcela {
+  id             String    @id @default(uuid())
+  vendaId        String
+  venda          Venda     @relation(fields: [vendaId], references: [id], onDelete: Cascade)
+  valorParcela   Decimal   @db.Decimal(10, 2)
+  dataVencimento DateTime
+  dataPagamento  DateTime?
+
+  @@map("parcelas")
+}
+
+model Devolucao {
+  id       String             @id @default(uuid())
+  vendaId  String
+  venda    Venda              @relation(fields: [vendaId], references: [id], onDelete: Cascade)
+  produtos DevolucaoProduto[]
+
+  @@map("devolucoes")
+}
+
+//devoluções que se relacionam com a model de produtos que estão em orçamentos
+model DevolucaoProduto {
+  id             String    @id @default(uuid())
+  devolucaoId    String
+  devolucao      Devolucao @relation(fields: [devolucaoId], references: [id], onDelete: Cascade)
+  produtoId      String
+  produto        OrcamentoProduto   @relation(fields: [produtoId], references: [id])
+  quantidade     Int
+  valorReembolso Decimal   @db.Decimal(10, 2)
+
+  @@map("devolucao_produtos")
+}
+
+//enum para forma de pagamento
+enum FormaPagamento {
+  AVISTA
+  APRAZO
 }

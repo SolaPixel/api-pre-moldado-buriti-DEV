@@ -19,10 +19,15 @@ Pré moldado Buriti App
 
 - [x] Deve ser possível cadastrar um orçamento
 - [x] Deve ser possível cadastrar um cliente
-- [x] Deve ser possível obter todos os orçamentos 
+- [x] Deve ser possível obter todos os orçamentos
 - [x] Deve ser possível alterar situação do orçamento
 - [x] Deve ser possível editar ou excluir um orçamento 
 - [ ] Deve ser possível salvar o orçamento em pdf, para assinatura do cliente e vendedor
+
+- [ ] Deve ser possível cadastrar uma venda
+- [ ] Deve ser possível cadastrar devoluções relacionadas a uma venda
+- [ ] Deve ser possível obter todas as vendas cadastradas
+
 
 
 ## RNs
@@ -40,6 +45,10 @@ Pré moldado Buriti App
 - [x] toda listagem de produto deve conter a quantidade de estoque disponível
 - [x] Não deve ser possível editar ou excluir um orçamento aprovado
 
+- [ ] O orçamento somente será aprovado junto com a criação de uma nova venda
+- [ ] Não deve ser possível editar ou excluir uma venda
+- [ ] Não deve ser possível editar ou excluir o registro de uma devolução
+
 
 ## RNFs
 
@@ -49,3 +58,5 @@ Pré moldado Buriti App
 - [ ] Todos os casos de uso deverão receber testes unitários recebendo repositórios em meória como parâmetros
 
 - [X] Todos os casos de uso referentes ao módulo de orçamentos deverão ser acessados via requisição http
+
+- [ ] Todos os casos de uso referentes ao módulo de vendas deverão ser acessados via requisição http
