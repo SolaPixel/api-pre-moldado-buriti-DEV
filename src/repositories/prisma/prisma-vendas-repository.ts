@@ -40,9 +40,15 @@ export class PrismaVendasRepository implements VendasRepository {
     }
 
 
-
-    findAll(): Promise<Venda[]> {
-        throw new Error("Method not implemented.");
+    async findAll() {
+        return await prisma.venda.findMany({
+            orderBy: { createdAt: 'desc' },
+            include: {
+                orcamento: true,
+                devolucoes: true,
+                parcelas: true
+            }, 
+        });
     }
 
     update(id: string, data: Prisma.VendaUncheckedUpdateInput): Promise<Venda> {

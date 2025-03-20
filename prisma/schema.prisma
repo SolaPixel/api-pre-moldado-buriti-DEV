@@ -87,7 +87,7 @@ model Orcamento {
   desconto         Decimal?           @db.Decimal(10, 2)
   valorComDesconto Decimal            @db.Decimal(10, 2)
   situacao         SituacaoOrcamento  @default(PENDENTE)
-  Venda            Venda[]
+  venda           Venda?              
 
   @@map("orcamentos")
 }
@@ -103,7 +103,6 @@ model OrcamentoProduto {
   modalidade    ModalidadeCompra
   valorUnitario Decimal          @db.Decimal(10, 2)
   valorTotal    Decimal          @db.Decimal(10, 2)
-  Devolucoes DevolucaoProduto[]
 
   @@map("orcamento_produtos")
 }
@@ -123,11 +122,11 @@ enum SituacaoOrcamento {
 
 // model de venda que se relaciona com um orçamento 
 model Venda {
-  id             String         @id @default(uuid())
+  id             String         @id @default(uuid()) // ID próprio de Venda
+  orcamentoId    String         @unique             // Garantindo relação 1 para 1
+  orcamento      Orcamento      @relation(fields: [orcamentoId], references: [id])
   numeracao      String         @unique
   createdAt      DateTime       @default(now())
-  orcamentoId    String         @unique
-  orcamento      Orcamento      @relation(fields: [orcamentoId], references: [id])
   formaPagamento FormaPagamento
   parcelas       Parcela[]
   devolucoes     Devolucao[]
@@ -162,7 +161,6 @@ model DevolucaoProduto {
   devolucaoId    String
   devolucao      Devolucao @relation(fields: [devolucaoId], references: [id], onDelete: Cascade)
   produtoId      String
-  produto        OrcamentoProduto   @relation(fields: [produtoId], references: [id])
   quantidade     Int
   valorReembolso Decimal   @db.Decimal(10, 2)
 

@@ -5,10 +5,10 @@ dados envolvendo DevolucaoS através do PRISMA
 
 import { prisma } from "@/lib/prisma";
 import { Devolucao, Prisma } from "@prisma/client"; //método com tipagens personalizadas e automáticas do prisma
-import { DevolucaosRepository } from "../devolucoes-repository";
+import { DevolucoesRepository } from "../devolucoes-repository";
 
 //classe com operações que utiliza métodos do repositório genérico e adiciona dado diretamente no banco
-export class PrismaDevolucaosRepository implements DevolucaosRepository {
+export class PrismaDevolucoesRepository implements DevolucoesRepository {
 
     async create(data: Prisma.DevolucaoUncheckedCreateInput) {
         const devolucao = await prisma.devolucao.create({
