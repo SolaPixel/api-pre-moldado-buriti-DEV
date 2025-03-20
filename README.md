@@ -24,7 +24,7 @@ Pré moldado Buriti App
 - [x] Deve ser possível editar ou excluir um orçamento 
 - [ ] Deve ser possível salvar o orçamento em pdf, para assinatura do cliente e vendedor
 
-- [ ] Deve ser possível cadastrar uma venda
+- [x] Deve ser possível cadastrar uma venda
 - [ ] Deve ser possível cadastrar devoluções relacionadas a uma venda
 - [ ] Deve ser possível obter todas as vendas cadastradas
 
@@ -46,7 +46,8 @@ Pré moldado Buriti App
 - [x] Não deve ser possível editar ou excluir um orçamento aprovado
 
 - [ ] O orçamento somente será aprovado junto com a criação de uma nova venda
-- [ ] Não deve ser possível editar ou excluir uma venda
+- [ ] Não deve ser possível cadastrar vendas com numeração duplicada
+- [x] Não deve ser possível editar ou excluir uma venda
 - [ ] Não deve ser possível editar ou excluir o registro de uma devolução
 
 
