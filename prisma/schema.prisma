@@ -38,6 +38,7 @@ model Produto {
   lotes         Lote[] //recebe todos os lotes relacionados
 
   orcamentos OrcamentoProduto[]
+  devolucoes Devolucao[]
 
   @@map("produtos")
 }
@@ -87,7 +88,7 @@ model Orcamento {
   desconto         Decimal?           @db.Decimal(10, 2)
   valorComDesconto Decimal            @db.Decimal(10, 2)
   situacao         SituacaoOrcamento  @default(PENDENTE)
-  venda           Venda?              
+  venda            Venda?
 
   @@map("orcamentos")
 }
@@ -123,7 +124,7 @@ enum SituacaoOrcamento {
 // model de venda que se relaciona com um orçamento 
 model Venda {
   id             String         @id @default(uuid()) // ID próprio de Venda
-  orcamentoId    String         @unique             // Garantindo relação 1 para 1
+  orcamentoId    String         @unique // Garantindo relação 1 para 1
   orcamento      Orcamento      @relation(fields: [orcamentoId], references: [id])
   numeracao      String         @unique
   createdAt      DateTime       @default(now())
@@ -146,25 +147,18 @@ model Parcela {
   @@map("parcelas")
 }
 
+//registro de devolução que contem um único produto relacionado com a venda e registro primário de produto
 model Devolucao {
-  id       String             @id @default(uuid())
-  vendaId  String
-  venda    Venda              @relation(fields: [vendaId], references: [id], onDelete: Cascade)
-  produtos DevolucaoProduto[]
+  id             String   @id @default(uuid())
+  vendaId        String
+  venda          Venda    @relation(fields: [vendaId], references: [id], onDelete: Cascade)
+  quantidade     Int
+  valorReembolso Decimal  @db.Decimal(10, 2)
+  produtoId      String
+  produto        Produto  @relation(fields: [produtoId], references: [id])
+  createdAt      DateTime @default(now())
 
   @@map("devolucoes")
-}
-
-//devoluções que se relacionam com a model de produtos que estão em orçamentos
-model DevolucaoProduto {
-  id             String    @id @default(uuid())
-  devolucaoId    String
-  devolucao      Devolucao @relation(fields: [devolucaoId], references: [id], onDelete: Cascade)
-  produtoId      String
-  quantidade     Int
-  valorReembolso Decimal   @db.Decimal(10, 2)
-
-  @@map("devolucao_produtos")
 }
 
 //enum para forma de pagamento

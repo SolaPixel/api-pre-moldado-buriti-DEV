@@ -48,7 +48,8 @@ export class PrismaProdutosRepository implements ProdutosRepository {
                     include: {
                         orcamento: true // Inclui os detalhes do orçamento relacionado
                     }
-                }
+                },
+                // devolucoes: true
             }
         });
 
@@ -81,7 +82,8 @@ export class PrismaProdutosRepository implements ProdutosRepository {
                     include: {
                         orcamento: true // Inclui os detalhes do orçamento relacionado
                     }
-                }
+                },
+                // devolucoes: true
             }, // Inclui lotes e categoria na busca
         });
 

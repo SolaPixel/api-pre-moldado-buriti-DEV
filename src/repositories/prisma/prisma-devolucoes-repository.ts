@@ -13,9 +13,6 @@ export class PrismaDevolucoesRepository implements DevolucoesRepository {
     async create(data: Prisma.DevolucaoUncheckedCreateInput) {
         const devolucao = await prisma.devolucao.create({
             data,
-            include: {
-                produtos: true
-            }
         });
 
         return devolucao

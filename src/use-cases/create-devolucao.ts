@@ -1,19 +1,18 @@
 import { DevolucoesRepository } from "@/repositories/devolucoes-repository";
 import { LotesRepository } from "@/repositories/lotes-repository";
 import { Devolucao, Lote } from "@prisma/client";
+import { LoteDoNotExistsError } from "./errors/lote-do-not-exists";
 
 interface CreateDevolucaoUseCaseRequest {
     vendaId: string,
-    produtos: {
-        produtoId: string,
-        quantidade: number,
-        valorReembolso: number
-    }[];
+    quantidade: number,
+    valorReembolso: number,
+    produtoId: string // pegar id de produto primário
 }
 
 interface CreateDevolucaoUseCaseResponse {
     devolucao: Devolucao;
-    lotesAtualizados: Lote[];
+    loteAtualizado?: Lote;
 }
 
 export class CreateDevolucaoUseCase {
@@ -24,43 +23,32 @@ export class CreateDevolucaoUseCase {
 
     async execute({
         vendaId,
-        produtos
+        quantidade,
+        valorReembolso,
+        produtoId
     }: CreateDevolucaoUseCaseRequest): Promise<CreateDevolucaoUseCaseResponse> {
-        
-        let lotesAtualizados: Lote[] = []; // Lista para armazenar os lotes atualizados
 
-        // Para cada produto devolvido, adicionamos a quantidade ao lote mais recente
-        for (const produto of produtos) {
-            let quantidadeRestante = produto.quantidade;
-            
-            // Busca os lotes do produto ordenados do mais recente para o mais antigo (LIFO)
-            const lotes = await this.lotesRepository.findByProduto(produto.produtoId);
-            const lotesOrdenados = lotes.sort((a, b) => b.dataAquisicao.getTime() - a.dataAquisicao.getTime());
-            
-            for (const lote of lotesOrdenados) {
-                if (quantidadeRestante <= 0) break;
-                
-                lote.quantAtual += quantidadeRestante;
-                quantidadeRestante = 0;
-                
-                // Atualiza o lote no banco de dados
-                const loteAtualizado = await this.lotesRepository.update(lote.id, { quantAtual: lote.quantAtual });
-                lotesAtualizados.push(loteAtualizado);
-            }
+
+        // Buscar o lote mais recente do produto
+        const loteMaisRecente = await this.lotesRepository.findMostRecentByProductId(produtoId);
+
+        if (!loteMaisRecente) {
+            throw new LoteDoNotExistsError()
         }
 
-        // Criação do registro de devolução
-        const devolucao = await this.devolucoesRepository.create({
-            vendaId,
-            produtos: {
-                create: produtos.map(produto => ({
-                    produtoId: produto.produtoId,
-                    quantidade: produto.quantidade,
-                    valorReembolso: produto.valorReembolso
-                })),
-            },
+        // Atualizar a quantidade atual do lote
+        const loteAtualizado = await this.lotesRepository.update(loteMaisRecente.id, {
+            quantAtual: loteMaisRecente.quantAtual + quantidade,
         });
 
-        return { devolucao, lotesAtualizados };
+        // Criar o registro de devolução
+        const devolucao = await this.devolucoesRepository.create({
+            vendaId,
+            quantidade,
+            valorReembolso,
+            produtoId
+        });
+
+        return { devolucao, loteAtualizado };
     }
 }

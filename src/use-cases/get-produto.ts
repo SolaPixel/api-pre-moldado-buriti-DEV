@@ -1,5 +1,5 @@
 import { ProdutosRepository } from "@/repositories/produtos-repository";
-import { Produto, Lote, OrcamentoProduto, Orcamento } from "@prisma/client";
+import { Produto, Lote, OrcamentoProduto, Orcamento, Devolucao } from "@prisma/client";
 import { ResourseNotFoundError } from "./errors/resourse-not-found-error";
 
 // Interface para tipar os parâmetros da requisição
@@ -16,6 +16,7 @@ interface GetProdutoUseCaseResponse {
 type ProdutoComRelacionamentos = Produto & {
     lotes: Lote[]; // Lista de lotes do produto
     orcamentos: (OrcamentoProduto & { orcamento: Orcamento })[]; // Lista de produtos em orçamentos, incluindo os orçamentos relacionados
+    devolucoes: Devolucao[];
 };
 
 // Tipo do retorno do produto com os cálculos adicionais
@@ -46,8 +47,11 @@ export class GetProdutoUseCase {
             .filter(op => op.orcamento.situacao === "APROVADO") // Filtra apenas orçamentos aprovados
             .reduce((total, op) => total + op.quantidade, 0); // Soma as quantidades vendidas
 
+         // Soma total das devoluções do produto
+         const totalDevolvido = produto.devolucoes.reduce((total, devolucao) => total + devolucao.quantidade, 0);
+
         // Calcula a quantidade disponível em estoque
-        const quantEstoque = totalQuantAdquirida - totalQuantVendido;
+        const quantEstoque = totalQuantAdquirida - totalQuantVendido + totalDevolvido;
 
         // Retorna o produto com os novos campos calculados
         return {

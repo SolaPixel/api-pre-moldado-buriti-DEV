@@ -1,8 +1,9 @@
 import { prisma } from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
+import { Lote, Prisma } from "@prisma/client";
 import { LotesRepository } from "../lotes-repository";
 
 export class PrismaLotesRepository implements LotesRepository {
+    
 
     //inserir um lote no banco
     async create(data: Prisma.LoteUncheckedCreateInput) {
@@ -32,10 +33,19 @@ export class PrismaLotesRepository implements LotesRepository {
         return lote
     }
 
-    //listar por categoria
+    //listar por produto
     async findByProduto(produtoId: string) {
 
         const lote = await prisma.lote.findMany({
+            orderBy: { dataAquisicao: 'desc' },
+            where: { produtoId }
+        });
+
+        return lote
+    }
+
+    async findMostRecentByProductId(produtoId: string) {
+        const lote = await prisma.lote.findFirst({
             orderBy: { dataAquisicao: 'desc' },
             where: { produtoId }
         });

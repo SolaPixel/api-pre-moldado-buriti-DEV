@@ -1,6 +1,6 @@
 import { ProdutosRepository } from "@/repositories/produtos-repository";
 import { CategoriasRepository } from "@/repositories/categorias-repository";
-import { Categoria, Produto, Lote, OrcamentoProduto, Orcamento } from "@prisma/client";
+import { Categoria, Produto, Lote, OrcamentoProduto, Orcamento, Devolucao } from "@prisma/client";
 import { ResourseNotFoundError } from "./errors/resourse-not-found-error";
 
 // Interface para tipar os parâmetros da requisição
@@ -18,6 +18,7 @@ interface GetProdutosCategoriaUseCaseResponse {
 type ProdutoComRelacionamentos = Produto & {
     lotes: Lote[]; // Lista de lotes do produto
     orcamentos: (OrcamentoProduto & { orcamento: Orcamento })[]; // Lista de produtos em orçamentos, incluindo os orçamentos relacionados
+    devolucoes: Devolucao[];
 };
 
 // Tipo do retorno do produto com os cálculos adicionais
@@ -32,7 +33,7 @@ export class GetProdutosCategoriaUseCase {
     constructor(
         private produtosRepository: ProdutosRepository,
         private categoriasRepository: CategoriasRepository
-    ) {}
+    ) { }
 
     async execute({ categoriaId }: GetProdutosCategoriaUseCaseRequest): Promise<GetProdutosCategoriaUseCaseResponse> {
         // Busca a categoria no repositório
@@ -48,22 +49,26 @@ export class GetProdutosCategoriaUseCase {
 
         // Mapeia os produtos, adicionando os cálculos de estoque
         const produtosComEstoque = produtos.map(produto => {
+
             // Calcula a quantidade total adquirida nos lotes do produto
             const totalQuantAdquirida = produto.lotes.reduce((total, lote) => total + lote.quantAdquirida, 0);
 
             // Calcula a quantidade total vendida considerando apenas orçamentos aprovados
             const totalQuantVendido = produto.orcamentos
-                .filter(op => op.orcamento.situacao === "APROVADO") // Filtra apenas orçamentos aprovados
-                .reduce((total, op) => total + op.quantidade, 0); // Soma as quantidades vendidas
+                .filter(op => op.orcamento.situacao === "APROVADO")
+                .reduce((total, op) => total + op.quantidade, 0);
+
+            // Soma total das devoluções do produto
+            const totalDevolvido = produto.devolucoes.reduce((total, devolucao) => total + devolucao.quantidade, 0);
 
             // Calcula a quantidade disponível em estoque
-            const quantEstoque = totalQuantAdquirida - totalQuantVendido;
+            const quantEstoque = totalQuantAdquirida - totalQuantVendido + totalDevolvido;
 
             // Retorna o produto com os novos campos calculados
             return {
-                ...produto, 
-                totalQuantAdquirida, 
-                totalQuantVendido, 
+                ...produto,
+                totalQuantAdquirida,
+                totalQuantVendido,
                 quantEstoque
             };
         });

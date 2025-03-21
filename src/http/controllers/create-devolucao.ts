@@ -1,21 +1,22 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { z } from "zod";
 import { makeCreateDevolucaoUseCase } from "@/use-cases/factories/make-create-devolucao-use-case";
+import { LoteDoNotExistsError } from "@/use-cases/errors/lote-do-not-exists";
 
 export async function createDevolucao(request: FastifyRequest, reply: FastifyReply) {
 
     const createDevolucaoBodySchema = z.object({
         vendaId: z.string(),
-        produtos: z.array(z.object({
-            produtoId: z.string(),
-            quantidade: z.number(),
-            valorReembolso: z.number()
-        })).nonempty("Deve haver pelo menos um produto."),
+        quantidade: z.number(),
+        valorReembolso: z.number(),
+        produtoId: z.string()
     });
 
     const {
         vendaId,
-        produtos,
+        quantidade,
+        valorReembolso,
+        produtoId
     } = createDevolucaoBodySchema.parse(request.body);
 
     try {
@@ -23,12 +24,16 @@ export async function createDevolucao(request: FastifyRequest, reply: FastifyRep
 
         await createDevolucaoUseCase.execute({
             vendaId,
-            produtos,
+            quantidade,
+            valorReembolso,
+            produtoId
         });
 
     } catch (err) {
-   
-        throw err;
+
+        if (err instanceof LoteDoNotExistsError) {
+            return reply.status(400).send({ message: err.message });
+        }
     }
 
     return reply.status(201).send();
