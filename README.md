@@ -63,4 +63,4 @@ Pré moldado Buriti App
 
 - [X] Todos os casos de uso referentes ao módulo de orçamentos deverão ser acessados via requisição http
 
-- [ ] Todos os casos de uso referentes ao módulo de vendas deverão ser acessados via requisição http
+- [x] Todos os casos de uso referentes ao módulo de vendas deverão ser acessados via requisição http

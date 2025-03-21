@@ -37,6 +37,7 @@ export class GetAllProdutos {
                 ...produto,
                 totalQuantAdquirida,
                 totalQuantVendido,
+                totalDevolvido,
                 quantEstoque
             };
         });

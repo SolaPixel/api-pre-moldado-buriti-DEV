@@ -21,6 +21,9 @@ import { updateOrcamento } from "./controllers/update-orcamento";
 import { updateSituacaoOrcamento } from "./controllers/update-siruacao-orcamento";
 import { getAllOrcamentos } from "./controllers/get-all-orcamentos";
 import { deleteOrcamento } from "./controllers/delete-orcamento";
+import { createVenda } from "./controllers/create-venda";
+import { getAllVendas } from "./controllers/get-all-vendas";
+import { createDevolucao } from "./controllers/create-devolucao";
 
 //função responsável por instanciar rotas vindo de controller
 export async function appRoutes(app: FastifyInstance) {
@@ -53,4 +56,10 @@ export async function appRoutes(app: FastifyInstance) {
     app.put('/orcamentoInfo', updateOrcamento)
     app.patch('/orcamentoSituacao', updateSituacaoOrcamento)
     app.delete('/orcamento/:id', deleteOrcamento)
+
+    app.post('/vendas', createVenda)
+    app.get('/allVendas', getAllVendas)
+
+    app.post('/devolucoes', createDevolucao)
+
 }

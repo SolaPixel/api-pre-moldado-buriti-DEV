@@ -69,6 +69,7 @@ export class GetProdutosCategoriaUseCase {
                 ...produto,
                 totalQuantAdquirida,
                 totalQuantVendido,
+                totalDevolvido,
                 quantEstoque
             };
         });
